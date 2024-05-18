@@ -1,6 +1,8 @@
 # sfetch
 simple neofetch
 
+[![Donate](https://www.paypal.com/donate/?hosted_button_id=B5RSGQ3ZW8V44&sdkMeta=eyJ1cmwiOiJodHRwczovL3d3dy5wYXlwYWxvYmplY3RzLmNvbS9kb25hdGUvc2RrL2RvbmF0ZS1zZGsuanMiLCJhdHRycyI6eyJkYXRhLXVpZCI6ImQyMDdjNzE0NmZfbXRxNm16eTZudGUifX0&targetMeta=eyJ6b2lkVmVyc2lvbiI6IjlfMF81OCIsInRhcmdldCI6IkRPTkFURSIsInNka1ZlcnNpb24iOiIwLjguMCJ9)
+
 supported ascii logos distros
 
 * arch
