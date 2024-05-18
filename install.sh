@@ -3,7 +3,7 @@
 # This script installs the XYZ software to the user's home directory using a local fetch script
 
 # Define variables
-SOFTWARE_NAME="XYZ" 
+SOFTWARE_NAME="simple fetch" 
 FETCH_SCRIPT="./sfetch"  # Path to the local fetch script
 TEMP_DIR=$(mktemp -d)
 
