@@ -12,8 +12,7 @@ supported ascii logos distros
 * zorin
 * elementary OS
 * manjaro
-
-================
+ 
 Default logo 
 
 
