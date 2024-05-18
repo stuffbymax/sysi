@@ -15,6 +15,7 @@ supported ascii logos distros
 
 ================
 Default logo 
+
           .88888888:.
         88888888.88888.
        .8888888888888888.
