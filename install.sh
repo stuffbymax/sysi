@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script installs the XYZ software to the user's home directory using a local fetch script
+# This script installs the simple-fetch software to the user's home directory using a local fetch script
 
 # Define variables
 SOFTWARE_NAME="simple-fetch" 
