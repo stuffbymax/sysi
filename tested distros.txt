@@ -1,0 +1,68 @@
+tested distros
+
+
+arch
+  
+
+
+          /\
+         /  \
+        /    \
+       /      \
+      /   ,,   \
+     /   |  |   \
+    /_-''    ''-_\
+
+Operating System: Arch Linux
+ Kernel Name: Linux
+ Kernel Version: 6.9.1-arch1-1
+ Kernel Release: #1 SMP PREEMPT_DYNAMIC Fri, 17 May 2024 16:56:38 +0000
+ Kernel Architecture: x86_64
+ Machine Hardware Platform: unknown
+ Processor Type: unknown
+ CPU: Intel(R) Pentium(R) CPU 4405U @ 2.10GHz
+ GPU: Intel Corporation HD Graphics 510 (rev 07)
+ Memory: 7.7Gi total, 3.5Gi used
+ Disk Usage: 12G used, 99G free
+ Second Hard Drive Usage: 22G used, 848G free
+ Flash Disk: 0 used, 3.9G free
+Clock/Time: 03:14
+ Mounted Drive/Drives:
+/dev/sdb2 mounted on /
+/dev/sdb1 mounted on /boot
+/dev/sda1 mounted on /home
+
+
+
+ubuntu
+
+
+         _    
+     ---(_)   
+ _/  ---  \   
+(_) |   |     
+  \  --- _/    
+     ---(_)  
+
+
+Operating System: Ubuntu 22.04.1 LTS
+ Kernel Name: Linux
+ Kernel Version: 5.4.0-1053-gcp
+ Kernel Release: #57~18.04.1-Ubuntu SMP Sun Sep 12 22:52:33 UTC 2021
+ Kernel Architecture: x86_64
+ Machine Hardware Platform: x86_64
+ Processor Type: x86_64
+ CPU: Intel(R) Xeon(R) CPU @ 2.80GHz
+main.bash: line 195: lspci: command not found
+ GPU: 
+ Memory: 7.8Gi total, 1.9Gi used
+ Disk Usage: 27G used, 7.5G free
+ Second Hard Drive Usage: 27G used, 7.5G free
+ Flash Disk: 0 used, 64M free
+Clock/Time: 02:17
+ Mounted Drive/Drives:
+/dev/sda1 mounted on /home
+/dev/sda1 mounted on /script
+/dev/sda1 mounted on /etc/resolv.conf
+/dev/sda1 mounted on /etc/hostname
+/dev/sda1 mounted on /etc/hosts
