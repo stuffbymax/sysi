@@ -181,27 +181,68 @@ EOF
     echo -e "\e[0m" # Reset color
 }
 
+# Function to get the package count based on package manager
+get_package_count() {
+    if command -v dpkg-query &> /dev/null; then
+        echo $(dpkg-query -f '${binary:Package}\n' -W | wc -l)
+    elif command -v rpm &> /dev/null; then
+        echo $(rpm -qa | wc -l)
+    elif command -v pacman &> /dev/null; then
+        echo $(pacman -Q | wc -l)
+    else
+        echo "N/A"
+    fi
+}
+
+# Function to display security information
+display_security_info() {
+    echo -e "\e[33mFirewall Status:\e[0m"
+    if command -v iptables &> /dev/null; then
+        sudo iptables -L
+    elif command -v ufw &> /dev/null; then
+        sudo ufw status
+    else
+        echo "Firewall command not found."
+    fi
+
+    if [ -x "$(command -v sestatus)" ]; then
+        echo -e "\n\e[33mSELinux Status:\e[0m"
+        sestatus
+    fi
+
+    if [ -x "$(command -v apparmor_status)" ]; then
+        echo -e "\n\e[33mAppArmor Status:\e[0m"
+        sudo apparmor_status
+    fi
+}
+
+
+
 # Function to display system information
 display_info() {
     os=$(awk -F= '/^PRETTY_NAME=/{print $2}' /etc/os-release | tr -d '"')
     echo -e "\e[33m Operating System:\e[0m $os"
+    echo -e "\e[33m  host: \e[0m $(cat /proc/sys/kernel/hostname)"
     echo -e "\e[33m Kernel Name:\e[0m $(uname -s)"
     echo -e "\e[33m Kernel Version:\e[0m $(uname -r)"
     echo -e "\e[33m Kernel Release:\e[0m $(uname -v)"
     echo -e "\e[33m Kernel Architecture:\e[0m $(uname -m)"
+    echo -e "\e[33m Uptime:\e[0m $(uptime)"
+    echo -e "\e[33m Packages:\e[0m $(get_package_count)"
+    echo -e "\e[33m Shell:\e[0m $SHELL"
+    echo -e "\e[33m Resolution:\e[0m $(xrandr | grep '*' | awk '{print $1}')"
     echo -e "\e[33m Machine Hardware Platform:\e[0m $(uname -i)"
     echo -e "\e[33m Processor Type:\e[0m $(uname -p)"
     echo -e "\e[33m CPU:\e[0m $(grep "model name" /proc/cpuinfo | cut -d ' ' -f 3- | uniq)"
     echo -e "\e[33m GPU:\e[0m $(lspci | grep VGA | cut -d ':' -f 3 | cut -d '[' -f 1 | sed 's/^ *//')"
-    echo -e "\e[33m Memory:\e[0m $(free -h --si | awk '/^Mem/ {print $3 " / " $2}') \e[33mall memory: :\e[0m$(awk '/MemTotal/ {print $2}' /proc/meminfo)"
-    echo -e "\e[33m Swap:\e[0m $(awk '/SwapTotal/ {print $2}' /proc/meminfo)" 
-
+    echo -e "\e[33m Memory:\e[0m $(free -h --si | awk '/^Mem/ {print $3 " / " $2}')"
+    echo -e "\e[33m Swap:\e[0m $(free -h --si | awk '/^Swap/ {print $3 " / " $2}')"
     echo -e "\e[33m Disk Usage:\e[0m $(df -h --output=used,size / | awk 'NR==2 {print $1 " / " $2}')"
-    echo -e "\e[33m Second Hard Drive Usage:\e[0m $(df -h --output=used,size /dev/sda1 | awk 'NR==2 {print $1 " / " $2}')"
-    echo -e "\e[33m Flash Disk:\e[0m $(df -h --output=used,size /dev/sda | awk 'NR==2 {print $1 " / " $2}')"
-    echo -e "\e[33mClock/Time:\e[0m $(date +"%H:%M")"
-    echo -e "\e[33m Mounted Drive/Drives:\e[0m"
-    mount | grep '^/dev/' | awk '{print $1 " mounted on " $3}'
+    echo -e "\e[33m Second Disk Usage:\e[0m $(df -h --output=used,size /dev/sda1 | awk 'NR==2 {print $1 " / " $2}')"
+    echo -e "\e[33m Other:\e[0m $(df -h --output=used,size /dev/sda | awk 'NR==2 {print $1 " / " $2}')"
+    echo -e "\e[33mClock/Time:\e[0m $(date '+%Y-%m-%d %H:%M:%S')"
+    echo -e "\e[33m Mounted Drive/Drives:\e[0m"
+    df -h --output=source,size,used,avail | grep --color=never -e '^/' -e Filesystem
 }
 
 # Main function to display output
@@ -209,6 +250,7 @@ main() {
     display_logo
     display_info
 }
+
 
 # Execute main function
 main
