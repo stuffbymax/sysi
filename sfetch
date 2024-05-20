@@ -193,7 +193,9 @@ display_info() {
     echo -e "\e[33m Processor Type:\e[0m $(uname -p)"
     echo -e "\e[33m CPU:\e[0m $(grep "model name" /proc/cpuinfo | cut -d ' ' -f 3- | uniq)"
     echo -e "\e[33m GPU:\e[0m $(lspci | grep VGA | cut -d ':' -f 3 | cut -d '[' -f 1 | sed 's/^ *//')"
-    echo -e "\e[33m Memory:\e[0m $(free -h --si | awk '/^Mem/ {print $3 " / " $2}')"
+    echo -e "\e[33m Memory:\e[0m $(free -h --si | awk '/^Mem/ {print $3 " / " $2}') all memory: $(awk '/MemTotal/ {print $2}' /proc/meminfo)"
+    echo -e "\e[33m Swap:\e[0m $(awk '/SwapTotal/ {print $2}' /proc/meminfo)" 
+
     echo -e "\e[33m Disk Usage:\e[0m $(df -h --output=used,size / | awk 'NR==2 {print $1 " / " $2}')"
     echo -e "\e[33m Second Hard Drive Usage:\e[0m $(df -h --output=used,size /dev/sda1 | awk 'NR==2 {print $1 " / " $2}')"
     echo -e "\e[33m Flash Disk:\e[0m $(df -h --output=used,size /dev/sda | awk 'NR==2 {print $1 " / " $2}')"
