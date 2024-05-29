@@ -5,6 +5,20 @@
 ## Table of Contents
 
 - [supported ascii](#ascii-logos-distros)
+    - [arch](#arch)
+    - [mint](#mint)
+    - [ubuntu](#ubuntu)
+    - [debian](#debian)
+    - [fedora](#fedora)
+    - [opensuse](#opensuse)
+    - [zorin](#zorin)
+    - [elementary OS](#elementary OS)
+    - [Manjaro](#Manjaro)
+    - [gentoo](#gentoo)
+
+
+
+
 - [How to Contribute](#how-to-contribute)
 - [Reporting Bugs](#reporting-bugs)
 - [Suggesting Enhancements](#suggesting-enhancements)
