@@ -1,5 +1,58 @@
 # sfetch
-simple neofetch
+## (simple neofetch)
+
+# demo
+
+```
+          /\
+         /  \
+        /    \
+       /      \
+      /   ,,   \
+     /   |  |   \
+    /_-''    ''-_\
+
+ Operating System: Arch Linux
+  host:  zdislav
+ Kernel Name: Linux
+ Kernel Version: 6.9.2-arch1-1
+ Kernel Release: #1 SMP PREEMPT_DYNAMIC Sun, 26 May 2024 01:30:29 +0000
+ Kernel Architecture: x86_64
+ Uptime:  04:34:22 up  1:11,  1 user,  load average: 1.25, 1.13, 1.39
+ Packages: 790
+ Shell: /usr/bin/bash
+ Resolution: 1920x1080
+ Machine Hardware Platform: unknown
+ Processor Type: unknown
+ CPU: Intel(R) Pentium(R) CPU 4405U @ 2.10GHz
+ CPU CORES:2
+ CPU THREADS:4
+ GPU: Intel Corporation HD Graphics 510 (rev 07)
+ Memory: 2.9G / 8.2G
+ Swap: 0B / 4.1G
+ Disk Usage: 18G/116G (17% used)
+ Second Disk Usage: (916G/103G used) 12%
+ Other: (3.9G/0 used) 0%
+ Clock/Time: 2024-05-29 04:34:23
+ BATTERY:    state:               charging
+    percentage:          76%
+ Mounted Drive/Drives:
+      Filesystem                     Size       Used       Use%      
+      dev                            3.9G       0          0%        
+      run                            3.9G       1.2M       1%        
+      efivarfs                       118K       51K        45%       
+      /dev/sdb2                      116G       18G        17%       
+      tmpfs                          3.9G       0          0%        
+      tmpfs                          3.9G       8.0K       1%        
+      /dev/sdb1                      1022M      144M       15%       
+      /dev/sda1                      916G       103G       12%       
+      tmpfs                          784M       52K        1%        
+
+GTK Theme: 'Breeze-Dark'
+Icon Theme: 'Papirus-Dark'
+Cursor Theme: 'Adwaita'
+```
+
 
 supported ascii logos distros
 
