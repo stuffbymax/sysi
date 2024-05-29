@@ -4,8 +4,8 @@
 
 ## Table of Contents
 -------
-- [demo](#demo)
 - [requitments](#to-run-this-script-youll-need-the-following-dependencies)
+- [demo](#demo)
 - [supported ascii](#ascii-logos-distros)
     - [arch](#arch)
     - [mint](#mint)
