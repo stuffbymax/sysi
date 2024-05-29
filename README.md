@@ -1,6 +1,20 @@
 # sfetch
 ## (simple neofetch)
 
+
+## Table of Contents
+
+- [supported ascii](#ascii-logos-distros)
+- [How to Contribute](#how-to-contribute)
+- [Reporting Bugs](#reporting-bugs)
+- [Suggesting Enhancements](#suggesting-enhancements)
+- [Submitting Changes](#submitting-changes)
+- [Code of Conduct](#code-of-conduct)
+- [License](#license)
+- [Contact](#contact)
+
+
+
 # demo
 
 ```
@@ -53,10 +67,10 @@ Icon Theme: 'Papirus-Dark'
 Cursor Theme: 'Adwaita'
 ```
 
+## ascii logos distros
+#### supported ascii logos distros
 
-supported ascii logos distros
-
-* arch
+### arch
 ```
           /\
          /  \
@@ -67,7 +81,7 @@ supported ascii logos distros
     /_-''    ''-_\
 ```
 
-* mint
+### mint
 ```
  ___________     
 |_          \   
@@ -77,7 +91,7 @@ supported ascii logos distros
   | \_____/ |    
   \_________/
 ```
-* ubuntu
+### ubuntu
 ```
            _    
      ---(_)   
@@ -87,7 +101,7 @@ supported ascii logos distros
      ---(_)  
 ```
 
-* debian
+### debian
 ```
   _____     
  /  __ \    
@@ -98,7 +112,7 @@ supported ascii logos distros
 ```
 
  
-* fedora
+### fedora
 ```
       _____      
      /   __)\    
@@ -109,7 +123,7 @@ supported ascii logos distros
 \ \__/  |        
  \(_____/ 
 ```
-* opensuse
+### opensuse
 ```
   _______     
 __|   __ \     
@@ -121,7 +135,7 @@ __________/
 
 ```
 
-* zorin
+### zorin
 ```
       `osssssssssssssssssssso`           
        .osssssssssssssssssssssso.          
@@ -142,7 +156,7 @@ ssssssssssssso/-`      `-/osssssssssssss
         `osssssssssssssssssssso`
 ```       
                                   
-* elementary OS
+### elementary OS
 ```
          eeeeeeeeeeeeeeeee            
     eeeee  eeeeeeeeeeee   eeeee       
@@ -164,7 +178,7 @@ eee    eeeeeeeeee     eeeeee    eee
 
 ```
 
-* manjaro
+### manjaro
 ```
 ||||||||| ||||   
 ||||||||| ||||   
@@ -174,6 +188,17 @@ eee    eeeeeeeeee     eeeeee    eee
 |||| |||| ||||   
 |||| |||| ||||
 
+```
+### gentoo
+```
+                .vir.                                d$b
+              .d$$$$$$b.    .cd$$b.     .d$$b.   d$$$$$$$$$$$b  .d$$b.      .d$$b.
+              $$$$( )$$$b d$$$()$$$.   d$$$$$$$b Q$$$$$$$P$$$P.$$$$$$$b.  .$$$$$$$b.
+              Q$$$$$$$$$$B$$$$$$$$P"  d$$$PQ$$$$b.   $$$$.   .$$$P' `$$$ .$$$P' `$$$
+                "$$$$$$$P Q$$$$$$$b  d$$$P   Q$$$$b  $$$$b   $$$$b..d$$$ $$$$b..d$$$
+               d$$$$$$P"   "$$$$$$$$ Q$$$     Q$$$$  $$$$$   `Q$$$$$$$P  `Q$$$$$$$P
+              $$$$$$$P       `"""""   ""        ""   Q$$$P     "Q$$$P"     "Q$$$P"
+              `Q$$P"                                  """
 ```
 
 # To run this script, you'll need the following dependencies:
