@@ -124,19 +124,23 @@ eee    eeeeeeeeee     eeeeee    eee
 ```
 
 # To run this script, you'll need the following dependencies:
-
-    Bash: Since this is a Bash script, you need the Bash interpreter installed on your system.
-    awk: This is used for text processing and pattern scanning.
-    grep: Used for searching patterns in text.
-    cat: For concatenating and displaying file contents.
-    pacman (for Arch Linux): Used by the function get_package_count() to count installed packages.
-    dpkg-query (for Debian-based systems): Also used by get_package_count() for package counting.
-    rpm (for Red Hat-based systems): Required for package counting on RPM-based systems.
-    gsettings: This is for accessing GNOME settings.
-    lspci: Used for displaying information about PCI buses in the system.
-    xrandr: For querying and setting display parameters.
-    free: For displaying memory usage information.
-    df: For displaying disk space usage.
-    upower: For getting battery information.
+## distro
+ ### (only for arch)
+ * ``pacman : Used by the function get_package_count() to count installed packages.``
+ ### (only for debian based)
+ * ``dpkg-query : Also used by get_package_count() for package counting.``
+ ### (only for Red Hat based systems) 
+ * ``rpm : Required for package counting on RPM-based systems.``
+  ### (All systems) 
+* ``Bash: Since this is a Bash script, you need the Bash interpreter installed on your system.``
+* ``awk: This is used for text processing and pattern scanning.``
+* ``grep: Used for searching patterns in text.``
+* ``cat: For concatenating and displaying file contents.``
+*`` gsettings: This is for accessing GNOME settings.``
+* ``lspci: Used for displaying information about PCI buses in the system.``
+* ``xrandr: For querying and setting display parameters.``
+*`` free: For displaying memory usage information.``
+* ``df: For displaying disk space usage.``
+* ``upower: For getting battery information.``
 
 Ensure that these commands are available on your system. Some of these commands might not be available on all systems by default, so you may need to install additional packages depending on your Linux distribution.
