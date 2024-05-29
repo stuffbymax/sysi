@@ -3,7 +3,9 @@
 
 
 ## Table of Contents
-
+-------
+- [demo](#demo)
+- [requitments](#to-run-this-script-youll-need-the-following-dependencies)
 - [supported ascii](#ascii-logos-distros)
     - [arch](#arch)
     - [mint](#mint)
@@ -12,20 +14,11 @@
     - [fedora](#fedora)
     - [opensuse](#opensuse)
     - [zorin](#zorin)
-    - [elementary OS](#elementary OS)
-    - [Manjaro](#Manjaro)
+    - [elementary OS](#elementary-os)
+    - [Manjaro](#manjaro)
     - [gentoo](#gentoo)
-
-
-
-
-- [How to Contribute](#how-to-contribute)
-- [Reporting Bugs](#reporting-bugs)
-- [Suggesting Enhancements](#suggesting-enhancements)
-- [Submitting Changes](#submitting-changes)
-- [Code of Conduct](#code-of-conduct)
-- [License](#license)
-- [Contact](#contact)
+      
+-------
 
 
 
