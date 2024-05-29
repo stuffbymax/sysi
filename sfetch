@@ -150,6 +150,24 @@ EOF
                 ;;
 
 
+				                 "gentoo")
+                echo -e "\e[34m" #blue
+                cat << "EOF"
+                                                      .
+                .vir.                                d$b
+              .d$$$$$$b.    .cd$$b.     .d$$b.   d$$$$$$$$$$$b  .d$$b.      .d$$b.
+              $$$$( )$$$b d$$$()$$$.   d$$$$$$$b Q$$$$$$$P$$$P.$$$$$$$b.  .$$$$$$$b.
+              Q$$$$$$$$$$B$$$$$$$$P"  d$$$PQ$$$$b.   $$$$.   .$$$P' `$$$ .$$$P' `$$$
+                "$$$$$$$P Q$$$$$$$b  d$$$P   Q$$$$b  $$$$b   $$$$b..d$$$ $$$$b..d$$$
+               d$$$$$$P"   "$$$$$$$$ Q$$$     Q$$$$  $$$$$   `Q$$$$$$$P  `Q$$$$$$$P
+              $$$$$$$P       `"""""   ""        ""   Q$$$P     "Q$$$P"     "Q$$$P"
+              `Q$$P"                                  """
+
+
+EOF
+                ;;
+
+
         esac
     else
         # Default logo
@@ -194,28 +212,17 @@ get_package_count() {
     fi
 }
 
-# Function to display security information
-display_security_info() {
-    echo -e "\e[33mFirewall Status:\e[0m"
-    if command -v iptables &> /dev/null; then
-        sudo iptables -L
-    elif command -v ufw &> /dev/null; then
-        sudo ufw status
-    else
-        echo "Firewall command not found."
-    fi
+# Function to get information about various themes
+get_theme_info() {
+    gtk_theme=$(gsettings get org.gnome.desktop.interface gtk-theme)
+    icon_theme=$(gsettings get org.gnome.desktop.interface icon-theme)
+    cursor_theme=$(gsettings get org.gnome.desktop.interface cursor-theme)
 
-    if [ -x "$(command -v sestatus)" ]; then
-        echo -e "\n\e[33mSELinux Status:\e[0m"
-        sestatus
-    fi
-
-    if [ -x "$(command -v apparmor_status)" ]; then
-        echo -e "\n\e[33mAppArmor Status:\e[0m"
-        sudo apparmor_status
-    fi
+    echo -e "\e[33mGTK Theme:\e[0m $gtk_theme"
+    echo -e "\e[33mIcon Theme:\e[0m $icon_theme"
+    echo -e "\e[33mCursor Theme:\e[0m $cursor_theme"
+    
 }
-
 
 
 # Function to display system information
@@ -234,21 +241,29 @@ display_info() {
     echo -e "\e[33m Machine Hardware Platform:\e[0m $(uname -i)"
     echo -e "\e[33m Processor Type:\e[0m $(uname -p)"
     echo -e "\e[33m CPU:\e[0m $(grep "model name" /proc/cpuinfo | cut -d ' ' -f 3- | uniq)"
+    echo -e "\e[33m CPU CORES:\e[0m$(awk '/^cpu cores/ {print $4; exit}' /proc/cpuinfo)"
+    echo -e "\e[33m CPU THREADS:\e[0m$(awk '/^processor/ {count++} END {print count}' /proc/cpuinfo)"
     echo -e "\e[33m GPU:\e[0m $(lspci | grep VGA | cut -d ':' -f 3 | cut -d '[' -f 1 | sed 's/^ *//')"
     echo -e "\e[33m Memory:\e[0m $(free -h --si | awk '/^Mem/ {print $3 " / " $2}')"
     echo -e "\e[33m Swap:\e[0m $(free -h --si | awk '/^Swap/ {print $3 " / " $2}')"
-    echo -e "\e[33m Disk Usage:\e[0m $(df -h --output=used,size / | awk 'NR==2 {print $1 " / " $2}')"
-    echo -e "\e[33m Second Disk Usage:\e[0m $(df -h --output=used,size /dev/sda1 | awk 'NR==2 {print $1 " / " $2}')"
-    echo -e "\e[33m Other:\e[0m $(df -h --output=used,size /dev/sda | awk 'NR==2 {print $1 " / " $2}')"
-    echo -e "\e[33mClock/Time:\e[0m $(date '+%Y-%m-%d %H:%M:%S')"
+    echo -e "\e[33m Disk Usage:\e[0m $(df -h / | awk 'NR==2 {print $3 "/" $2 " (" $5 " used)"}')"
+    echo -e "\e[33m Second Disk Usage:\e[0m $(df -h /dev/sda1 | awk 'NR==2 {print "(" $2 "/" $3 " used) " $5}')"
+    echo -e "\e[33m Other:\e[0m $(df -h /dev/sda | awk 'NR==2 {print "(" $2 "/" $3 " used) " $5}')"
+    echo -e "\e[33m Clock/Time:\e[0m $(date '+%Y-%m-%d %H:%M:%S')"
+    echo -e "\e[33m BATTERY:\e[0m$(upower -i $(upower -e | grep BAT) | grep --color=never -E "state|to full|percentage")"
     echo -e "\e[33m Mounted Drive/Drives:\e[0m"
-    df -h --output=source,size,used,avail | grep --color=never -e '^/' -e Filesystem
+     printf "      %-30s %-10s %-10s %-10s\n" "Filesystem" "Size" "Used" "Use%"
+  df -h | awk 'NR>1 {printf "      %-30s %-10s %-10s %-10s\n", $1, $2, $3, $5}'
+    echo -e ""
+
+
 }
 
 # Main function to display output
 main() {
     display_logo
     display_info
+    get_theme_info
 }
 
 
