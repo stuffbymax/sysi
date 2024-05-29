@@ -136,10 +136,10 @@ eee    eeeeeeeeee     eeeeee    eee
 * ``awk: This is used for text processing and pattern scanning.``
 * ``grep: Used for searching patterns in text.``
 * ``cat: For concatenating and displaying file contents.``
-*`` gsettings: This is for accessing GNOME settings.``
+* ``gsettings: This is for accessing GNOME settings.``
 * ``lspci: Used for displaying information about PCI buses in the system.``
 * ``xrandr: For querying and setting display parameters.``
-*`` free: For displaying memory usage information.``
+* ``free: For displaying memory usage information.``
 * ``df: For displaying disk space usage.``
 * ``upower: For getting battery information.``
 
