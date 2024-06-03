@@ -228,4 +228,10 @@ eee    eeeeeeeeee     eeeeee    eee
 * ``df: For displaying disk space usage.``
 * ``upower: For getting battery information.``
 
+  # arch install
+
+  ```
+  sudo pacman -Syu coreutils procps-ng gawk grep pciutils xorg-xrandr upower gsettings-desktop-schemas
+  ```
+
 Ensure that these commands are available on your system. Some of these commands might not be available on all systems by default, so you may need to install additional packages depending on your Linux distribution.
