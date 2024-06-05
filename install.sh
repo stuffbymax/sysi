@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# This script installs the simple-fetch software to the user's home directory using a local fetch script
+# This script installs the advanced-fetch software to the user's home directory using a local fetch script
 
 # Define variables
-SOFTWARE_NAME="simple-fetch" 
-FETCH_SCRIPT="./sfetch"  # Path to the local fetch script
+SOFTWARE_NAME="afetch" 
+FETCH_SCRIPT="./afetch"  # Path to the local fetch script
 TEMP_DIR=$(mktemp -d)
 
 # Function to display messages
@@ -16,11 +16,11 @@ display_message() {
 
 # Function to move fetch script to /usr/local/bin and set executable permissions
 setup_fetch_script() {
-    display_message "Setting up fetch script..."
+    display_message "Setting up afetch script..."
     chmod +x sfetch
-    sudo mv sfetch /usr/local/bin/sfetch
+    sudo mv sfetch /usr/local/bin/afetch
     display_message "Setting executable permissions..."
-    sudo chmod +x /usr/local/bin/sfetch
+    sudo chmod +x /usr/local/bin/afetch
     display_message "Fetch script setup complete."
 }
 
