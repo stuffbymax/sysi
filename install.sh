@@ -16,9 +16,9 @@ display_message() {
 
 # Function to move fetch script to /usr/local/bin and set executable permissions
 setup_fetch_script() {
-    display_message "Setting up afetch script..."
-    chmod +x sfetch
-    sudo mv sfetch /usr/local/bin/afetch
+    display_message "Setting up Afetch script..."
+    chmod +x afetch
+    sudo mv afetch /usr/local/bin/afetch
     display_message "Setting executable permissions..."
     sudo chmod +x /usr/local/bin/afetch
     display_message "Fetch script setup complete."
