@@ -1,5 +1,5 @@
 # afetch
-## (advanced neofetch)
+## (advanced fetch)
 
 
 ## Table of Contents
