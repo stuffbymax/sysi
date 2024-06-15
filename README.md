@@ -208,6 +208,25 @@ eee    eeeeeeeeee     eeeeee    eee
               `Q$$P"                                  """
 ```
 
+```
+                     ./o.                 
+                   ./sssso-                
+                 `:osssssss+-              
+               `:+sssssssssso/.             
+             `-/ossssssssssssso/.          
+           `-/+sssssssssssssssso+:`        
+         `-:/+sssssssssssssssssso+/.       
+       `.://osssssssssssssssssssso++-      
+      .://+ssssssssssssssssssssssso++:     
+    .:///ossssssssssssssssssssssssso++:    
+  `:////ssssssssssssssssssssssssssso+++.   
+`-////+ssssssssssssssssssssssssssso++++-   
+ `..-+oosssssssssssssssssssssssso+++++/`   
+   ./++++++++++++++++++++++++++++++/:.     
+  `:::::::::::::::::::::::::------``   
+```
+
+
 # To run this script, you'll need the following dependencies:
 ## distro
  ### (only for arch)
