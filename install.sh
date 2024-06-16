@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# This script installs the advanced-fetch software to the user's home directory using a local fetch script
+# This script installs the sysi (system information) software to the user's home directory using a local fetch script
 
 # Define variables
-SOFTWARE_NAME="afetch" 
-FETCH_SCRIPT="./afetch"  # Path to the local fetch script
+SOFTWARE_NAME="sysi" 
+FETCH_SCRIPT="./sysi"  # Path to the local  script
 TEMP_DIR=$(mktemp -d)
 
 # Function to display messages
@@ -14,13 +14,13 @@ display_message() {
 
 
 
-# Function to move fetch script to /usr/local/bin and set executable permissions
+# Function to move  script to /usr/local/bin and set executable permissions
 setup_fetch_script() {
-    display_message "Setting up Afetch script..."
-    chmod +x afetch
-    sudo mv afetch /usr/local/bin/afetch
+    display_message "Setting up sysi script..."
+    chmod +x sysi
+    sudo mv sysi /usr/local/bin/sysi
     display_message "Setting executable permissions..."
-    sudo chmod +x /usr/local/bin/afetch
+    sudo chmod +x /usr/local/bin/sysi
     display_message "Fetch script setup complete."
 }
 
