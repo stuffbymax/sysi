@@ -1,11 +1,11 @@
-# sisy Script Overview made by AI
+# sysi Script Overview made by AI
 
 ## Description
-The `sisy` is designed to provide comprehensive system information on Linux-based operating systems. It is meant to be a versatile tool that collects and displays essential details about the system's hardware, software, and usage statistics.
+The `sysi` is designed to provide comprehensive system information on Linux-based operating systems. It is meant to be a versatile tool that collects and displays essential details about the system's hardware, software, and usage statistics.
 
 ## Requirements
 
-To run `sisy` without issues, ensure the following:
+To run `sysi` without issues, ensure the following:
 
 1. **Operating System**:
    - Linux-based operating system (e.g., Ubuntu, Fedora, Debian, Arch).
