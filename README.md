@@ -134,8 +134,11 @@ The `sysi` script is a custom bash script provided to display detailed system in
 
 - **Neofetch:** Ideal for quick, basic system information display with minimal setup.
 - **sysi Bash Script:** Suitable for users needing detailed and customizable system information and are comfortable with shell scripting.
+---
+# questions
 
-## why no ascii distribution logo
-- i delete the ascii logos because there are over 600 active Linux distros and making ascii logo for them when only one person is making it is not posiable same with unix like OS so thats why i choosed to have one. also it is make stand out to others 
+## why no ascii distribution logo?
+- i delete the ascii logos because there are over 600 active Linux distros and making ascii logo for them when only one person is making it is not possible same with unix like OS so thats why i choosed to have one. also it is make stand out to others 
 
-
+## why i chenged the name?
+i chenged the name because many reasons. there are a lot of scipts name somthing fetch also that afetch was arleady taken but syfi sound funny and it make it stand out also is "not neofetch clone" or based on neofetch so calling it afetch didint make sence for me.
