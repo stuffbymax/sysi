@@ -73,4 +73,67 @@ Install necessary utilities using your package manager. Examples:
 ## Additional Notes
 - Customize the script as needed by modifying or adding functionalities.
 - Ensure to update system utilities and permissions as necessary for accurate and secure operation.
+---
+
+# Comparison: Neofetch vs sysi Bash Script
+
+## Comparison of Features
+
+| Feature                     | Neofetch                   | sysi                           |
+|-----------------------------|----------------------------|--------------------------------|
+| **ASCII Art**               | Yes, customizable          | Yes, specific to script        |
+| **OS Detection**            | Yes                        | Yes                            |
+| **Kernel Info**             | Yes                        | Yes                            |
+| **Uptime**                  | Yes                        | Yes                            |
+| **Packages Count**          | Yes                        | Yes                            |
+| **Shell Info**              | Yes                        | Yes                            |
+| **Resolution**              | Yes                        | Yes                            |
+| **CPU Info**                | Yes                        | Yes                            |
+| **CPU Cores/Threads**       | No                         | Yes                            |
+| **Fan Speeds**              | No                         | Yes (if lm_sensors installed)  |
+| **GPU Info**                | Yes                        | Yes                            |
+| **GPU Temperatures**        | No                         | Yes (Nvidia, AMD, Intel GPUs)  |
+| **Memory Info**             | Yes                        | Yes                            |
+| **Disk Usage**              | Yes                        | Yes                            |
+| **Battery Info**            | Yes                        | Yes                            |
+| **Theme Info**              | Limited                    | Yes                            |
+| **Customization**           | High (config file)         | High (script editing)          |
+| **Ease of Use**             | High (simple command)      | Moderate (run script manually) |
+
+## Neofetch
+
+Neofetch is a popular command-line tool that displays system information in a visually appealing ASCII art format.
+
+### Pros:
+- **Ease of Use:** Simple command (`neofetch`) to display basic system information.
+- **Visual Appeal:** Provides information in a visually pleasing ASCII art format.
+- **Cross-Distribution Support:** Works across different Linux distributions and BSD systems.
+
+### Cons:
+- **Limited Customization:** Offers limited customization options compared to a custom script.
+- **Dependency on External Tools:** Relies on external commands and tools for certain information.
+
+---
+
+## sysi Bash Script
+
+The `sysi` script is a custom bash script provided to display detailed system information including CPU/GPU details, memory usage, fan speeds (if available), and more.
+
+### Pros:
+- **Customizable Output:** Can be tailored to display specific system information and formatted as desired.
+- **Comprehensive Information:** Provides extensive details such as CPU temperature, GPU information, memory and disk usage.
+- **Flexibility:** Script can be expanded and modified based on user needs.
+
+### Cons:
+- **Complexity:** Requires knowledge of shell scripting to understand and modify.
+- **System-Specific Adjustments:** May need adjustments to work across different Linux distributions or Unix-like systems.
+
+---
+
+## Conclusion
+
+- **Neofetch:** Ideal for quick, basic system information display with minimal setup.
+- **sysi Bash Script:** Suitable for users needing detailed and customizable system information and are comfortable with shell scripting.
+
+
 
