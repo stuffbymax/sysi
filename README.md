@@ -1,257 +1,41 @@
-# afetch
+# System Information Script (`sysinfo.sh`)
+
+## Overview
+This Bash script (`sysinfo.sh`) displays detailed system information, including OS details, hardware specifications, CPU/GPU temperatures, memory usage, disk space, and more. It utilizes various Linux commands and utilities to gather and present this information in a structured format.
+
+## Features
+- **Operating System Information:**
+  - Displays OS name, hostname, kernel version, architecture, etc.
+- **Hardware Details:**
+  - CPU model, cores, threads, and temperature (if `lm_sensors` is installed).
+  - GPU temperatures for Nvidia, AMD, and Intel GPUs (if respective tools are installed).
+  - Memory (RAM) and Swap usage.
+  - Disk usage details.
+- **System Metrics:**
+  - Uptime, package count (based on the package manager).
+  - Shell type, screen resolution, machine hardware platform.
+- **Additional Information:**
+  - GTK theme, icon theme, cursor theme (for GNOME desktop).
+  - Battery status (if available), mounted drives, current system time.
+
+## Advantages
+- **Comprehensive Information:** Provides a wide range of system details useful for troubleshooting, monitoring, or general system overview.
+- **Customizable:** Easily extendable to add or remove specific functionalities based on user needs.
+- **Simple Execution:** Runs with basic permissions and requires standard Linux utilities, making it accessible on most Linux distributions.
+- **Formatted Output:** Uses ASCII art for logo and colored output for better readability.
+
+## Disadvantages
+- **Dependency on Tools:** Requires certain utilities (`sensors`, `nvidia-smi`, `radeontop`, `intel_gpu_top`) to be installed for GPU temperature monitoring.
+- **Limited Compatibility:** Primarily designed for Linux systems and may require adjustments for other Unix-like operating systems.
+- **Manual Updates:** Some functionalities (like network interfaces, top processes, etc.) are commented out and need manual enabling.
+- **Security Considerations:** Running certain commands (`sensors`, `nvidia-smi`, etc.) may require elevated privileges or specific user permissions.
+
+## Future Enhancements
+- Enable additional functionalities such as network interface details, top processes by CPU/memory usage, system logs, disk I/O statistics, and system load metrics.
+- Implement error handling for missing dependencies or unavailable system commands.
+- Support for other Unix-like systems or different Linux distributions.
+
+## Usage
+To execute the script:
+```bash
 sysi
-## (advanced fetch)
-
-
-## Table of Contents
--------
-- [requitments](#to-run-this-script-youll-need-the-following-dependencies)
-- [demo](#demo)
-- [supported ascii](#ascii-logos-distros)
-    - [arch](#arch)
-    - [mint](#mint)
-    - [ubuntu](#ubuntu)
-    - [debian](#debian)
-    - [fedora](#fedora)
-    - [opensuse](#opensuse)
-    - [zorin](#zorin)
-    - [elementary OS](#elementary-os)
-    - [Manjaro](#manjaro)
-    - [gentoo](#gentoo)
-      
--------
-
-
-
-# demo
-
-```
-          /\
-         /  \
-        /    \
-       /      \
-      /   ,,   \
-     /   |  |   \
-    /_-''    ''-_\
-
- Operating System: Arch Linux
-  host:  zdislav
- Kernel Name: Linux
- Kernel Version: 6.9.2-arch1-1
- Kernel Release: #1 SMP PREEMPT_DYNAMIC Sun, 26 May 2024 01:30:29 +0000
- Kernel Architecture: x86_64
- Uptime:  04:34:22 up  1:11,  1 user,  load average: 1.25, 1.13, 1.39
- Packages: 790
- Shell: /usr/bin/bash
- Resolution: 1920x1080
- Machine Hardware Platform: unknown
- Processor Type: unknown
- CPU: Intel(R) Pentium(R) CPU 4405U @ 2.10GHz
- CPU CORES:2
- CPU THREADS:4
- GPU: Intel Corporation HD Graphics 510 (rev 07)
- Memory: 2.9G / 8.2G
- Swap: 0B / 4.1G
- Disk Usage: 18G/116G (17% used)
- Second Disk Usage: (916G/103G used) 12%
- Other: (3.9G/0 used) 0%
- Clock/Time: 2024-05-29 04:34:23
- BATTERY:    state:               charging
-    percentage:          76%
- Mounted Drive/Drives:
-      Filesystem                     Size       Used       Use%      
-      dev                            3.9G       0          0%        
-      run                            3.9G       1.2M       1%        
-      efivarfs                       118K       51K        45%       
-      /dev/sdb2                      116G       18G        17%       
-      tmpfs                          3.9G       0          0%        
-      tmpfs                          3.9G       8.0K       1%        
-      /dev/sdb1                      1022M      144M       15%       
-      /dev/sda1                      916G       103G       12%       
-      tmpfs                          784M       52K        1%        
-
-GTK Theme: 'Breeze-Dark'
-Icon Theme: 'Papirus-Dark'
-Cursor Theme: 'Adwaita'
-```
-
-## ascii logos distros
-#### supported ascii logos distros
-
-### arch
-```
-          /\
-         /  \
-        /    \
-       /      \
-      /   ,,   \
-     /   |  |   \
-    /_-''    ''-_\
-```
-
-### mint
-```
- ___________     
-|_          \   
-  | | _____ |    
-  | | | | | |   
-  | | | | | |   
-  | \_____/ |    
-  \_________/
-```
-### ubuntu
-```
-           _    
-     ---(_)   
- _/  ---  \   
-(_) |   |     
-  \  --- _/    
-     ---(_)  
-```
-
-### debian
-```
-  _____     
- /  __ \    
-|  /    |    
-|  \___-     
--_          
-  --_ 
-```
-
- 
-### fedora
-```
-      _____      
-     /   __)\    
-     |  /  \ \   
-  ___|  |__/ /   
- / (_    _)_/    
-/ /  |  |        
-\ \__/  |        
- \(_____/ 
-```
-### opensuse
-```
-  _______     
-__|   __ \     
-     / .\ \   
-     \__/ |   
-   _______|   
-   \_______   
-__________/ 
-
-```
-
-### zorin
-```
-      `osssssssssssssssssssso`           
-       .osssssssssssssssssssssso.          
-      .+oooooooooooooooooooooooo+.         
-                                           
-                                           
-  `::::::::::::::::::::::.         .:`     
- `+ssssssssssssssssss+:.`     `.:+ssso`    
-.ossssssssssssssso/.       `-+ossssssso.   
-ssssssssssssso/-`      `-/osssssssssssss    
-.ossssssso/-`      .-/ossssssssssssssso.   
- `+sss+:.      `.:+ssssssssssssssssss+`    
-  `:.         .::::::::::::::::::::::`     
-                                           
-                                           
-      .+oooooooooooooooooooooooo+.         
-       -osssssssssssssssssssssso-          
-        `osssssssssssssssssssso`
-```       
-                                  
-### elementary OS
-```
-         eeeeeeeeeeeeeeeee            
-    eeeee  eeeeeeeeeeee   eeeee       
-  eeee   eeeee       eee     eeee     
- eeee   eeee          eee     eeee    
-eee    eee            eee       eee   
-eee   eee            eee        eee   
-ee    eee           eeee       eeee   
-ee    eee         eeeee      eeeeee   
-ee    eee       eeeee      eeeee ee   
-eee   eeee   eeeeee      eeeee  eee   
-eee    eeeeeeeeee     eeeeee    eee   
- eeeeeeeeeeeeeeeeeeeeeeee    eeeee    
-  eeeeeeee eeeeeeeeeeee      eeee     
-    eeeee                 eeeee       
-      eeeeeee         eeeeeee         
-         eeeeeeeeeeeeeeeee            
-
-
-```
-
-### manjaro
-```
-||||||||| ||||   
-||||||||| ||||   
-||||      ||||   
-|||| |||| ||||   
-|||| |||| ||||   
-|||| |||| ||||   
-|||| |||| ||||
-
-```
-### gentoo
-```
-                .vir.                                d$b
-              .d$$$$$$b.    .cd$$b.     .d$$b.   d$$$$$$$$$$$b  .d$$b.      .d$$b.
-              $$$$( )$$$b d$$$()$$$.   d$$$$$$$b Q$$$$$$$P$$$P.$$$$$$$b.  .$$$$$$$b.
-              Q$$$$$$$$$$B$$$$$$$$P"  d$$$PQ$$$$b.   $$$$.   .$$$P' `$$$ .$$$P' `$$$
-                "$$$$$$$P Q$$$$$$$b  d$$$P   Q$$$$b  $$$$b   $$$$b..d$$$ $$$$b..d$$$
-               d$$$$$$P"   "$$$$$$$$ Q$$$     Q$$$$  $$$$$   `Q$$$$$$$P  `Q$$$$$$$P
-              $$$$$$$P       `"""""   ""        ""   Q$$$P     "Q$$$P"     "Q$$$P"
-              `Q$$P"                                  """
-```
-
-```
-                     ./o.                 
-                   ./sssso-                
-                 `:osssssss+-              
-               `:+sssssssssso/.             
-             `-/ossssssssssssso/.          
-           `-/+sssssssssssssssso+:`        
-         `-:/+sssssssssssssssssso+/.       
-       `.://osssssssssssssssssssso++-      
-      .://+ssssssssssssssssssssssso++:     
-    .:///ossssssssssssssssssssssssso++:    
-  `:////ssssssssssssssssssssssssssso+++.   
-`-////+ssssssssssssssssssssssssssso++++-   
- `..-+oosssssssssssssssssssssssso+++++/`   
-   ./++++++++++++++++++++++++++++++/:.     
-  `:::::::::::::::::::::::::------``   
-```
-
-
-# To run this script, you'll need the following dependencies:
-## distro
- ### (only for arch)
- * ``pacman : Used by the function get_package_count() to count installed packages.``
- ### (only for debian based)
- * ``dpkg-query : Also used by get_package_count() for package counting.``
- ### (only for Red Hat based systems) 
- * ``rpm : Required for package counting on RPM-based systems.``
-  ### (All systems) 
-* ``Bash: Since this is a Bash script, you need the Bash interpreter installed on your system.``
-* ``awk: This is used for text processing and pattern scanning.``
-* ``grep: Used for searching patterns in text.``
-* ``cat: For concatenating and displaying file contents.``
-* ``gsettings: This is for accessing GNOME settings.``
-* ``lspci: Used for displaying information about PCI buses in the system.``
-* ``xrandr: For querying and setting display parameters.``
-* ``free: For displaying memory usage information.``
-* ``df: For displaying disk space usage.``
-* ``upower: For getting battery information.``
-
-  # arch install
-
-  ```
-  sudo pacman -Syu coreutils procps-ng gawk grep pciutils xorg-xrandr upower gsettings-desktop-schemas
-  ```
-
-Ensure that these commands are available on your system. Some of these commands might not be available on all systems by default, so you may need to install additional packages depending on your Linux distribution.
