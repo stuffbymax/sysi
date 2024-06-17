@@ -124,12 +124,29 @@ get_theme_info() {
     echo -e "\e[33mCursor Theme:\e[0m $cursor_theme"
 }
 
+# Function to check if Nerdfonts are installed
+check_nerdfonts() {
+    if fc-list : file family | grep -q "Nerd Font"; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 # Main function to display output
 main() {
     clear
     display_logo
     display_info
     get_theme_info
+
+ # Check if Nerdfonts are installed
+    if check_nerdfonts; then
+        echo -e "\e[32mNerdfonts are installed.\e[0m"
+    else
+        echo -e "\e[31mNerdfonts are not installed. Displaying alternative output.\e[0m"
+        # Display alternative output here
+    fi
 }
 
 # Execute main function
