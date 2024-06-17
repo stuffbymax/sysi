@@ -9,7 +9,13 @@ To run `sysi` without issues, ensure the following:
 
 1. **Operating System**:
    - Linux-based operating system (e.g., Ubuntu, Fedora, Debian, Arch).
-
+1.5  **fonts**
+     - nerd font needed
+     - get nerd font https://www.nerdfonts.com/
+     - if you using arch `sudo pacaman -S nerd-fonts`
+     - 
+       (Repository extra)
+       
 2. **Dependencies**:
    - Basic Linux utilities (`awk`, `grep`, `sed`, `cut`, `awk`).
    - Additional utilities for CPU and GPU monitoring:
