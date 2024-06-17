@@ -31,22 +31,15 @@ w
     echo -e "\e[33m Kernel Architecture:\e[0m $(uname -m)"
     echo -e "\e[33m Uptime:\e[0m $(uptime -p)"
     echo -e "\e[33m Packages:\e[0m $(get_package_count)"
-    echo -e "\e[33m Resolution:\e[0m $(xrandr | grep -i  "*" )"
+    echo -e "\e[33m Shell:\e[0m $SHELL"
+    echo -e "\e[33m Resolution:\e[0m $(xrandr | grep '*' | awk '{print $1}')"
     echo -e "\e[33m Machine Hardware Platform:\e[0m $(uname -i)"
     echo -e "\e[33m Processor Type:\e[0m $(uname -p)"
     echo -e "\e[33m CPU:\e[0m $(grep "model name" /proc/cpuinfo | cut -d ' ' -f 3- | uniq)"
     echo -e "\e[33m CPU Cores:\e[0m $(awk '/^cpu cores/ {print $4; exit}' /proc/cpuinfo)"
-    echo -e "\e[33m CPU Threads:\e[0m $(awk '/^processor/ {count++} END {print count}' /proc/cpuinfo)"    
-  # Display fan speeds if available
-    echo -e "\e[33m Fan Speeds:\e[0m"
-    
-    # Check and display fan speeds using lm_sensors (assuming it's installed)
-    if command -v sensors &> /dev/null; then
-        sensors | awk '/^fan/ {print "      ", $1, $2, $3}'
-    else
-        echo -e "\e[33m   Not available (lm_sensors not installed)\e[0m"
-    fi
+    echo -e "\e[33m CPU Threads:\e[0m $(awk '/^processor/ {count++} END {print count}' /proc/cpuinfo)"
 
+    # Get CPU temperature using lm_sensors (assuming it's installed)
     if command -v sensors &> /dev/null; then
         echo -e "\e[33m CPU Temperature:\e[0m"
         sensors | grep "Core"
@@ -84,9 +77,7 @@ w
     printf "      %-30s %-10s %-10s %-10s\n" "Filesystem" "Size" "Used" "Use%"
     df -h | awk 'NR>1 {printf "      %-30s %-10s %-10s %-10s\n", $1, $2, $3, $5}'
 echo -e ""
-
-     # [Additional functionalities enable manually]
-    
+    # [Additional functionalities endable manualy]
     #echo -e "\e[33m Network Interfaces:\e[0m"
     #ip addr show
 
@@ -106,24 +97,6 @@ echo -e ""
 
     #echo -e "\e[33m System Load:\e[0m"
     #uptime
-
-    #echo -e "\e[32m Shell:\e[0m $SHELL"
-
-    # [user need to endable]
-    
-    # Display Firewall Information [user need to endable]
-    # echo -e "\e[33m Firewall Information:\e[0m"
-    #echo -e "\e[33m   UFW Status:\e[0m"
-    #ufw status verbose | sed 's/^/      /'  # Adjust format as needed for your system's output
-    #echo -e "\e[33m   IPTables Rules:\e[0m"
-    #iptables -L -v -n | sed 's/^/      /'  # Adjust format as needed for your system's output
-    #echo -e "\e[33m   Firewalld Zones and Services:\e[0m"
-    #firewall-cmd --list-all-zones | sed 's/^/      /'  # Adjust format as needed for your system's output
-    #echo -e "\e[33m   Nftables Rules:\e[0m"
-    #nft list ruleset | sed 's/^/      /'  # Adjust format as needed for your system's output
-
-   #[ Resolution can be repleced with more detailed one ]
-    #echo -e "\e[33m Resolution:\e[0m $(hwinfo --monitor)"
 }
 
 
