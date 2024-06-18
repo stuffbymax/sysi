@@ -7,7 +7,7 @@ what i use AI for
 * readme
 * last option to ask
 * "debugin"
--
+
 # why i use AI
  * Because it can identify and predict potential issues, recommend solutions, and even execute debugging tasks, reducing the burden on developers and expediting the development lifecycle.
 
