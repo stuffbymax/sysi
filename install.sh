@@ -41,7 +41,57 @@ get_distribution() {
     fi
 }
 
-# Function to install Nerd Fonts
+# Get GPU info and convert to lower case
+GPU=$(lspci | grep -iE "vga")
+GPU=$(echo $GPU | tr '[:upper:]' '[:lower:]')
+
+# Output to check
+echo "lspci output for VGA device is: $GPU"
+echo 
+echo "Looping through the device information"
+
+# Loop through the GPU info to identify the GPU
+for indices in $GPU; do
+    case $indices in
+        *radeon*)
+            echo "String Radeon found."
+            g="AMD Radeon"
+            packages_to_install=("radeontop")
+            break
+            ;;
+        *amd/ati*)
+            echo "String AMD/ATI found."
+            g="AMD ATI"
+            packages_to_install=("radeontop")
+            break
+            ;;
+        *intel*)
+            echo "String Intel found."
+            g="INTEL"
+            packages_to_install=("intel-gpu-tools")
+            break
+            ;;
+        *nvidia*)
+            echo "String NVIDIA found."
+            g="NVIDIA"
+            packages_to_install=("nvidia-utils")
+            break
+            ;;
+    esac
+done
+
+echo "VGA Device: $g"
+
+# Check and install the required packages for the identified GPU
+if [[ ${#packages_to_install[@]} -gt 0 ]]; then
+    echo "Installing packages for $g: ${packages_to_install[*]}"
+    distribution=$(get_distribution)
+    install_packages "$distribution" "${packages_to_install[@]}"
+else
+    echo "No specific GPU packages to install."
+fi
+
+# Install Nerd Fonts
 install_nerdfonts() {
     echo "Installing Nerd Fonts..."
     local distribution=$1
@@ -61,32 +111,6 @@ install_nerdfonts() {
             ;;
     esac
 }
-
-# Check dependencies
-dependencies=("lm_sensors" "nvidia-utils" "radeontop" "intel_gpu_top")
-missing_deps=()
-
-for dep in "${dependencies[@]}"; do
-    if ! command_exists "$dep"; then
-        missing_deps+=("$dep")
-    fi
-done
-
-# Install missing dependencies
-if [[ ${#missing_deps[@]} -gt 0 ]]; then
-    echo "Installing missing dependencies: ${missing_deps[*]}"
-    distribution=$(get_distribution)
-
-    case $distribution in
-        debian|ubuntu|arch|endeavouros|manjaro)
-            install_packages "$distribution" "${missing_deps[@]}"
-            ;;
-        *)
-            echo "Unsupported distribution: $distribution"
-            exit 1
-            ;;
-    esac
-fi
 
 # Check for and install Nerd Fonts
 echo "Checking for Nerd Fonts..."
