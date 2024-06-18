@@ -1,8 +1,12 @@
+[this section is made by BluishHumility
+
 # sysi Script
 
 README written by AI
--
-what i use AI for
+----
+]
+
+# what i use AI for
 -
 * readme
 * last option to ask
@@ -13,7 +17,7 @@ what i use AI for
 
 ## Description
 The `sysi` is designed to provide comprehensive system information on Linux-based operating systems. It is meant to be a versatile tool that collects and displays essential details about the system's hardware, software, and usage statistics.
-
+--
 ## Requirements
 
 To run `sysi` without issues, ensure the following:
