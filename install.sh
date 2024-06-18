@@ -1,34 +1,106 @@
 #!/bin/bash
 
-# This script installs the sysi (system information) software to the user's home directory using a local fetch script
-
-# Define variables
-SOFTWARE_NAME="sysi" 
-FETCH_SCRIPT="./sysi"  # Path to the local  script
-TEMP_DIR=$(mktemp -d)
-
-# Function to display messages
-display_message() {
-    echo "$1"
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" &> /dev/null
 }
 
+# Function to install packages based on distribution
+install_packages() {
+    local distribution=$1
+    shift
+    local packages=("$@")
 
-
-# Function to move  script to /usr/local/bin and set executable permissions
-setup_fetch_script() {
-    display_message "Setting up sysi script..."
-    chmod +x sysi
-    sudo mv sysi /usr/local/bin/sysi
-    display_message "Setting executable permissions..."
-    sudo chmod +x /usr/local/bin/sysi
-    display_message "Fetch script setup complete."
+    case $distribution in
+        debian|ubuntu)
+            sudo apt update
+            sudo apt install -y "${packages[@]}"
+            ;;
+        fedora)
+            sudo dnf install -y "${packages[@]}"
+            ;;
+        arch|endeavouros|manjaro)
+            sudo pacman -Syu --needed --noconfirm "${packages[@]}"
+            ;;
+        *)
+            echo "Unsupported distribution: $distribution"
+            exit 1
+            ;;
+    esac
 }
 
-# Main function
-main() {
-    setup_fetch_script
-    
+# Determine the Linux distribution
+get_distribution() {
+    if command_exists lsb_release; then
+        lsb_release -si | tr '[:upper:]' '[:lower:]'
+    elif [ -e /etc/os-release ]; then
+        source /etc/os-release
+        echo "$ID" | tr '[:upper:]' '[:lower:]'
+    else
+        echo "unknown"
+    fi
 }
 
-# Run the script
-main
+# Function to install Nerd Fonts
+install_nerdfonts() {
+    echo "Installing Nerd Fonts..."
+    local distribution=$1
+    case $distribution in
+        debian|ubuntu)
+            sudo apt install -y fonts-firacode
+            ;;
+        fedora)
+            sudo dnf install -y fira-code-fonts
+            ;;
+        arch|endeavouros|manjaro)
+            sudo pacman -S --noconfirm --needed ttf-fira-code
+            ;;
+        *)
+            echo "Unsupported distribution: $distribution"
+            exit 1
+            ;;
+    esac
+}
+
+# Check dependencies
+dependencies=("lm_sensors" "nvidia-utils" "radeontop" "intel_gpu_top")
+missing_deps=()
+
+for dep in "${dependencies[@]}"; do
+    if ! command_exists "$dep"; then
+        missing_deps+=("$dep")
+    fi
+done
+
+# Install missing dependencies
+if [[ ${#missing_deps[@]} -gt 0 ]]; then
+    echo "Installing missing dependencies: ${missing_deps[*]}"
+    distribution=$(get_distribution)
+
+    case $distribution in
+        debian|ubuntu|arch|endeavouros|manjaro)
+            install_packages "$distribution" "${missing_deps[@]}"
+            ;;
+        *)
+            echo "Unsupported distribution: $distribution"
+            exit 1
+            ;;
+    esac
+fi
+
+# Check for and install Nerd Fonts
+echo "Checking for Nerd Fonts..."
+if ! fc-list : file family | grep -q "Nerd Font"; then
+    distribution=$(get_distribution)
+    install_nerdfonts "$distribution"
+else
+    echo "Nerd Fonts are already installed."
+fi
+
+# Install SYSI script
+echo "Installing SYSI script..."
+sudo cp sysi /usr/local/bin/sysi
+sudo chmod +x /usr/local/bin/sysi
+
+echo "SYSI installation completed."
+echo "You can now run 'sysi' to display system information."
