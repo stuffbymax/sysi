@@ -1,4 +1,4 @@
-# sysi Script Overview made by AI
+# sysi Script (Overview made by AI aka the md/readme is "AI generated")
 
 ## Description
 The `sysi` is designed to provide comprehensive system information on Linux-based operating systems. It is meant to be a versatile tool that collects and displays essential details about the system's hardware, software, and usage statistics.
