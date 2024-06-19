@@ -1,7 +1,8 @@
  # people who would prefer to stay anonymous that helped.
  - mz provided get_percentage stuff and set -u set -e set -o pipefail
  - sy pointed that storage % was on right
- - tg
+ - tg helped a lot mz helped a lot and sy helped a lot
+   
 # people that helped
 - BluishHumility fixed the ai problem
 - DsturbD pointed the nerd-font problem
