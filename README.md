@@ -9,7 +9,6 @@ README written by AI
 ]
 
 # what i use AI for
--
 * readme
 * last option to ask
 * "debugin"
