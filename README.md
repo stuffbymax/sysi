@@ -1,4 +1,4 @@
-## update soon i am just fixing some stuff
+
 
 [this section is made by BluishHumility
 
