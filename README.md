@@ -1,4 +1,10 @@
-
+ # people who would prefer to stay anonymous that helped.
+ - mz provided get_percentage stuff and set -u set -e set -o pipefail
+ - sy pointed that storage % was on right
+ - tg
+# people that helped
+- BluishHumility fixed the ai problem
+- DsturbD pointed the nerd-font problem
 
 [this section is made by BluishHumility
 
@@ -121,7 +127,12 @@ Install necessary utilities using your package manager. Examples:
 | **Disk Usage**              | Yes                        | Yes                            |
 | **Battery Info**            | Yes                        | Yes                            |
 | **Theme Info**              | Limited                    | Yes                            |
-|**disk I/O statistics:**     | no                         | yes
+| **Network Interfaces:**     | no                         | yes                            |
+|**Top Processes CPU Usage**  | no                         | yes                            |
+|**Top Processes ram Usage**  | no                         | yes                            |
+|**System Logs**              | no                         | yes                            |
+|**disk I/O statistics:**     | no                         | yes                            |
+| **Firewall Information**    | no                         | yes                            |
 | **Customization**           | High (config file)         | High (script editing)          |
 | **Ease of Use**             | High (simple command)      | Moderate (run script manually) |
 
