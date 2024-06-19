@@ -35,7 +35,8 @@ To run `sysi` without issues, ensure the following:
 2. **Dependencies**:
    - Basic Linux utilities (`awk`, `grep`, `sed`, `cut`, `awk`).
    - Additional utilities for CPU and GPU monitoring:
-     - `lm-sensors` for CPU temperature.
+     - `lm-sensors` for CPU temperature and gpu temperature.
+       ### only if you endable in a script
      - `nvidia-smi` for Nvidia GPU temperature.
      - `radeontop` for AMD GPU temperature.
      - `intel-gpu-tools` for Intel GPU temperature.
@@ -64,10 +65,11 @@ Install necessary utilities using your package manager. Examples:
 - **Hardware Information**: Provides details about the host, CPU model, cores, threads, and architecture.
 - **Temperature Monitoring**: Retrieves and displays CPU and GPU temperatures using available system utilities.
 - **Memory and Storage**: Shows memory (RAM) and swap usage, as well as disk usage statistics.
+- **disk I/O statistics:** indicators of how well your storage devices are performing and handling data transfers
 - **System Uptime**: Indicates how long the system has been running.
 - **Package Management**: Counts installed packages using package managers.
 - **User Interface Themes**: Fetches information about GTK theme, icon theme, and cursor theme.
-- **Additional Information** (commented out): Includes options for displaying network interfaces, top CPU and memory-consuming processes, system logs, disk I/O statistics, and system load.
+- **Additional Information** (commented out): Includes options for displaying network interfaces, top CPU and memory-consuming processes, system logs,  and system load.
 
 ## Advantages
 - **Comprehensive**: Provides a wide range of system information in a structured format.
@@ -119,6 +121,7 @@ Install necessary utilities using your package manager. Examples:
 | **Disk Usage**              | Yes                        | Yes                            |
 | **Battery Info**            | Yes                        | Yes                            |
 | **Theme Info**              | Limited                    | Yes                            |
+|**disk I/O statistics:**     | no                         | yes
 | **Customization**           | High (config file)         | High (script editing)          |
 | **Ease of Use**             | High (simple command)      | Moderate (run script manually) |
 
