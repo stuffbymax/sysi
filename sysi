@@ -144,8 +144,8 @@ main() {
     if check_nerdfonts; then
         echo -e "\e[32mNerdfonts are installed.\e[0m"
     else
-        echo -e "\e[31mNerdfonts are not installed. Displaying alternative output.\e[0m"
-        # Display alternative output here
+        echo -e "\e[31mNerdfonts are not installed.\e[0m"
+       
     fi
 }
 
