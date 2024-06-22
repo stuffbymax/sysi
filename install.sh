@@ -63,9 +63,21 @@ install_nerdfonts() {
 }
 
 # Check dependencies
-dependencies=("lm_sensors" "nvidia-utils" "radeontop" "intel_gpu_top")
-missing_deps=()
+dependencies=("lm_sensors")
 
+# Detect GPU and add appropriate utilities
+gpu=$(lspci | grep -i vga)
+
+if echo "$gpu" | grep -iq 'nvidia'; then
+    dependencies+=("nvidia-utils")
+elif echo "$gpu" | grep -iq 'amd'; then
+    dependencies+=("radeontop")
+elif echo "$gpu" | grep -iq 'intel'; then
+    dependencies+=("intel-gpu-tools")
+fi
+
+# Find missing dependencies
+missing_deps=()
 for dep in "${dependencies[@]}"; do
     if ! command_exists "$dep"; then
         missing_deps+=("$dep")
@@ -78,7 +90,7 @@ if [[ ${#missing_deps[@]} -gt 0 ]]; then
     distribution=$(get_distribution)
 
     case $distribution in
-        debian|ubuntu|arch|endeavouros|manjaro)
+        debian|ubuntu|arch|endeavouros|manjaro|fedora)
             install_packages "$distribution" "${missing_deps[@]}"
             ;;
         *)
