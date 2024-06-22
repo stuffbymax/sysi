@@ -103,13 +103,13 @@ echo -e ""
      # [Additional functionalities enable manually]
     
 #[network]
-    #echo -e "\e[33m Network Interfaces:\e[0m"
+    #echo -e "\e[33m  Network Interfaces:\e[0m"
     #ip addr show
 #[cpu/process]
-    #echo -e "\e[33m Top Processes by CPU Usage:\e[0m"
+    #echo -e "\e[33m  Top Processes by CPU Usage:\e[0m"
     #ps -eo pid,ppid,%cpu,%mem,cmd --sort=-%cpu | head -n 10
 
-    #echo -e "\e[33m Top Processes by Memory Usage:\e[0m"
+    #echo -e "\e[33m  Top Processes by Memory Usage:\e[0m"
     #ps -eo pid,ppid,%cpupre-built PC’s that are considered gaming systems the norm is 32G.,%mem,cmd --sort=-%mem | head -n 10
 
 #[gpu]
@@ -135,7 +135,7 @@ echo -e ""
     #fi
 
 #[logs]
-    #echo -e "\e[33m System Logs (last 20 lines of syslog):\e[0m"
+    #echo -e "\e[33m  System Logs (last 20 lines of syslog):\e[0m"
     #tail -n 20 /var/log/syslog
 
 
