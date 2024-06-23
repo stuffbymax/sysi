@@ -5,6 +5,18 @@ set -u
 
 
 
+#!/bin/bash
+set -u
+#set -e
+#set -o pipefail
+
+# Function to calculate percentage
+get_percentage() {
+    used=$1
+    total=$2
+    awk -v used="$used" -v total="$total" 'BEGIN { printf("%.2f%%", (used / total) * 100) }'
+}
+
 # Get memory and swap usage details
 memory_usage=$(free -h --si | awk '/^Mem/ {print $3 " / " $2}')
 swap_usage=$(free -h --si | awk '/^Swap/ {print $3 " / " $2}')
@@ -12,12 +24,12 @@ swap_usage=$(free -h --si | awk '/^Swap/ {print $3 " / " $2}')
 # Calculate percentage for memory
 memory_used=$(free --si | awk '/^Mem/ {print $3}')
 memory_total=$(free --si | awk '/^Mem/ {print $2}')
-memory_percentage=$(awk -v used="$memory_used" -v total="$memory_total" 'BEGIN { printf("%.2f%%", (used / total) * 100) }')
+memory_percentage=$(get_percentage "$memory_used" "$memory_total")
 
 # Calculate percentage for swap
 swap_used=$(free --si | awk '/^Swap/ {print $3}')
 swap_total=$(free --si | awk '/^Swap/ {print $2}')
-swap_percentage=$(awk -v used="$swap_used" -v total="$swap_total" 'BEGIN { printf("%.2f%%", (used / total) * 100) }')
+swap_percentage=$(get_percentage "$swap_used" "$swap_total")
 
 # Function to display ASCII art of a computer screen with SYSI
 display_logo() {
@@ -34,33 +46,29 @@ display_logo() {
     echo -e "\e[43m    \\_________/\e[0m"
     echo -e "\e[93m \e[0m"
     echo -e "\e[93m \e[0m"
-
 }
-
-
 
 # Function to display system information including GPU temperatures
 display_info() {
     os=$(awk -F= '/^PRETTY_NAME=/{print $2}' /etc/os-release | tr -d '"')
     echo -e "\e[33m  Operating System:\e[0m $os"
     echo -e "\e[33m  Host:\e[0m $(cat /proc/sys/kernel/hostname)"
-       echo -e "\e[33m  model:\e[0m $(cat /sys/devices/virtual/dmi/id/board_{name,vendor} | awk '!(NR%2){print$1,p}{p=$0}')"
-    echo -e "\e[33m Logged-in Users:\e[0m"
-w
-    echo -e "\e[33m Kernel Name:\e[0m $(uname -s)"
-    echo -e "\e[33m Kernel Version:\e[0m $(uname -r)"
-    echo -e "\e[33m Kernel Release:\e[0m $(uname -v)"
-    echo -e "\e[33m Kernel Architecture:\e[0m $(uname -m)"
+    echo -e "\e[33m  Model:\e[0m $(cat /sys/devices/virtual/dmi/id/board_{name,vendor} | awk '!(NR%2){print$1,p}{p=$0}')"
+    echo -e "\e[33m  Logged-in Users:\e[0m"
+    w
+    echo -e "\e[33m  Kernel Name:\e[0m $(uname -s)"
+    echo -e "\e[33m  Kernel Version:\e[0m $(uname -r)"
+    echo -e "\e[33m  Kernel Release:\e[0m $(uname -v)"
+    echo -e "\e[33m  Kernel Architecture:\e[0m $(uname -m)"
     echo -e "\e[33m  Uptime:\e[0m $(uptime -p)"
     echo -e "\e[33m  Clock/Time:\e[0m $(date '+%Y-%m-%d %H:%M:%S')"
     echo -e "\e[33m  Packages:\e[0m $(get_package_count)"
-    echo -e "\e[33m  Resolution:\e[0m $(xrandr | grep -i  "*" )"
+ echo -e "\e[33m  Resolution:\e[0m $(xrandr | grep -i  "*" )"
     echo -e "\e[33m  Machine Hardware Platform:\e[0m $(uname -i)"
     echo -e "\e[33m  Processor Type:\e[0m $(uname -p)"
     echo -e "\e[33m  CPU:\e[0m $(grep "model name" /proc/cpuinfo | cut -d ' ' -f 3- | uniq)"
     echo -e "\e[33m  CPU Cores:\e[0m $(awk '/^cpu cores/ {print $4; exit}' /proc/cpuinfo)"
-    echo -e "\e[33m  CPU Threads:\e[0m $(awk '/^processor/ {count++} END {print count}' /proc/cpuinfo)"        
-   # Display fan speeds using sensors
+    echo -e "\e[33m  CPU Threads:\e[0m $(awk '/^processor/ {count++} END {print count}' /proc/cpuinfo)"
     echo -e "\e[33m  Fan Speeds:\e[0m"
     if command -v sensors &> /dev/null; then
         fan_speeds=$(sensors | grep -i 'fan' | awk '{print "      ", $1, $2, $3, $4}')
@@ -73,7 +81,6 @@ w
         echo -e "\e[33m   Not available (sensors not installed)\e[0m"
     fi
 
-
     if command -v sensors &> /dev/null; then
         echo -e "\e[33m  CPU Temperature:\e[0m"
         sensors | grep "Core"
@@ -82,23 +89,24 @@ w
     fi
 
     # Display GPU temperatures using sensors
-    echo -e "\e[33m  GPU Temperatures:\e[0m $(sensors | grep -i 'gpu')"
+    echo -e "\e[33m  GPU Temperatures:\e[0m"
     if command -v sensors &> /dev/null; then
         sensors | grep -i 'gpu'
     else
         echo -e "\e[33m   Not available (sensors not installed)\e[0m"
     fi
+
     echo -e "\e[33m  GPU:\e[0m $(lspci | grep VGA | cut -d ':' -f 3 | cut -d '[' -f 1,2 | sed 's/^ *//')"
-    echo -e "\e[33m  Memory:\e[0m ($memory_percentage) ($memory_usage) "
-    echo -e "\e[33m  Swap:\e[0m ($swap_percentage) ($swap_usage) "
-    echo -e "\e[33m  Disk Usage:\e[0m $(df -h / | awk 'NR==2 {print "(" $5 " used) " $3 "/" $2  }')"
+    echo -e "\e[33m  Memory:\e[0m $memory_percentage ($memory_usage)"
+    echo -e "\e[33m  Swap:\e[0m $swap_percentage ($swap_usage)"
+    echo -e "\e[33m  Disk Usage:\e[0m $(df -h / | awk 'NR==2 {print "(" $5 " used) " $3 "/" $2 }')"
     echo -e "\e[33m  Battery:\e[0m $(upower -i $(upower -e | grep BAT) | grep --color=never -E "state|to full|percentage")"
     echo -e "\e[33m  Mounted Drives:\e[0m"
     printf "      %-30s %-10s %-10s %-10s\n" "Filesystem" "Size" "Used" "Use%"
     df -h | awk 'NR>1 {printf "      %-30s %-10s %-10s %-10s\n", $1, $2, $3, $5}'
-        echo -e "\e[33m Disk I/O Statistics:\e[0m$(iostat)"
-    
-echo -e ""
+    echo -e "\e[33m Disk I/O Statistics:\e[0m"
+    iostat
+    echo -e ""
 
      # [Additional functionalities enable manually]
     
