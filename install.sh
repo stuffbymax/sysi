@@ -20,7 +20,7 @@ install_packages() {
             sudo dnf install -y "${packages[@]}"
             ;;
         arch|endeavouros|manjaro)
-            sudo pacman -Syu --needed --noconfirm "${packages[@]}"
+            yay -S --noconfirm "${packages[@]}"
             ;;
         *)
             echo "Unsupported distribution: $distribution"
@@ -41,19 +41,24 @@ get_distribution() {
     fi
 }
 
-# Function to install Nerd Fonts
-install_nerdfonts() {
-    echo "Installing Nerd Fonts..."
+# Function to install Iosevka Nerd Font using yay on Arch-based distributions
+install_nerdfont_arch() {
+    echo "Installing Iosevka Nerd Font using yay..."
+    sudo pacman -S ttf-iosevkaterm-nerd
+}
+
+# Function to install Iosevka Nerd Font based on distribution
+install_nerdfont() {
     local distribution=$1
     case $distribution in
         debian|ubuntu)
-            sudo apt install -y fonts-firacode
+            sudo apt install -y fonts-iosevka
             ;;
         fedora)
-            sudo dnf install -y fira-code-fonts
+            sudo dnf install -y iosevka-fonts
             ;;
         arch|endeavouros|manjaro)
-            sudo pacman -S --noconfirm --needed ttf-fira-code
+            install_nerdfont_arch
             ;;
         *)
             echo "Unsupported distribution: $distribution"
@@ -63,18 +68,7 @@ install_nerdfonts() {
 }
 
 # Check dependencies
-dependencies=("lm_sensors")
-
-# Detect GPU and add appropriate utilities
-gpu=$(lspci | grep -i vga)
-
-if echo "$gpu" | grep -iq 'nvidia'; then
-    dependencies+=("nvidia-utils")
-elif echo "$gpu" | grep -iq 'amd'; then
-    dependencies+=("radeontop")
-elif echo "$gpu" | grep -iq 'intel'; then
-    dependencies+=("intel-gpu-tools")
-fi
+dependencies=("lm_sensors" "ttf-iosevka-nerd")
 
 # Find missing dependencies
 missing_deps=()
@@ -100,13 +94,13 @@ if [[ ${#missing_deps[@]} -gt 0 ]]; then
     esac
 fi
 
-# Check for and install Nerd Fonts
-echo "Checking for Nerd Fonts..."
-if ! fc-list : file family | grep -q "Nerd Font"; then
+# Check for and install Iosevka Nerd Font
+echo "Checking for Iosevka Nerd Font..."
+if ! fc-list : file family | grep -q "Iosevka"; then
     distribution=$(get_distribution)
-    install_nerdfonts "$distribution"
+    install_nerdfont "$distribution"
 else
-    echo "Nerd Fonts are already installed."
+    echo "Iosevka Nerd Font is already installed."
 fi
 
 # Install SYSI script
