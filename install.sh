@@ -68,7 +68,7 @@ install_nerdfont() {
 }
 
 # Check dependencies
-dependencies=("lm_sensors" "ttf-iosevka-nerd")
+dependencies=("lm_sensors" "ttf-iosevka-nerd" "sysstat")
 
 # Find missing dependencies
 missing_deps=()
