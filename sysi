@@ -3,13 +3,6 @@ set -u
 #set -e
 #set -o pipefail
 
-
-
-#!/bin/bash
-set -u
-#set -e
-#set -o pipefail
-
 # Function to calculate percentage
 get_percentage() {
     used=$1
