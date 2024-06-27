@@ -1,6 +1,45 @@
 #!/bin/bash
 set -u
 
+# Function to add colors
+color_text() {
+    local color=$1
+    local text=$2
+    case $color in
+        "red")
+            echo -e "\033[31m${text}\033[0m" ;;
+        "green")
+            echo -e "\033[32m${text}\033[0m" ;;
+        "yellow")
+            echo -e "\033[33m${text}\033[0m" ;;
+        "blue")
+            echo -e "\033[34m${text}\033[0m" ;;
+        "magenta")
+            echo -e "\033[35m${text}\033[0m" ;;
+        "cyan")
+            echo -e "\033[36m${text}\033[0m" ;;
+        "white")
+            echo -e "\033[37m${text}\033[0m" ;;
+        *)
+            echo "$text" ;;
+    esac
+}
+
+# Function to center text based on terminal width, handling multi-line input
+center_text() {
+    local text="$1"
+    local cols=$(tput cols)
+    while IFS= read -r line; do
+        local text_length=${#line}
+        if [ $text_length -lt $cols ]; then
+            local padding=$(( (cols - text_length) / 2 ))
+            printf "%${padding}s%s\n" " " "$line"
+        else
+            echo "$line"
+        fi
+    done <<< "$text"
+}
+
 # Function to calculate percentage
 get_percentage() {
     used=$1
@@ -20,9 +59,14 @@ display_quote() {
         "The Web as I envisaged it, we have not seen it yet. The future is still so much bigger than the past. - Tim Berners-Lee"
         "The only way to make software secure, reliable, and fast is to put it out in the public domain and let people attack it, play with it, and break it. - Brian Behlendorf"
         "I believe that openness is the key to creativity and innovation. - Mitchell Baker"
+        "May the Force be with you. -Star Wars (many characters)"
+        "Knowledge is power. -Sir Francis Bacon"
+        "Information flow is what the Internet is about. Information sharing is power. If you dont share your ideas smart people cant do anything about them and your all remain anonymous and powerless. -Vint cerf"
+        "When we have welcoming communities of contributors, open source software gets better and more useful to everyone. -Limor Fried"
+        "Open source is about collaborating; not competing. -Kelesey Hightower"
     )
     random_index=$((RANDOM % ${#quotes[@]}))
-    echo -e "\e[34mRandom Quote:\e[0m ${quotes[$random_index]}"
+  center_text "$(color_text "cyan" "Random Quote: ${quotes[$random_index]}")"
 }
 
 
@@ -34,10 +78,21 @@ display_joke() {
         "A SQL statement walks into a bar and sees two tables. It approaches, and asks, 'May I join you?'"
         "Why do Java developers wear glasses? Because they don't see sharp."
         "How many programmers does it take to change a light bulb? None. It's a hardware problem."
+        "your mama so fat 32 she cant store file over 4 GB"
+        "your mama so ugly she turn sdd into flopy"
+        "Knock, knock. Who’s There? Very long pause… Java."
+        "Things aren’t always #000000 and #FFFFFF"
+        "Why do Java programmers have to wear glasses? Because they don’t C#"
+        "There’s no place like 127.0.0.1"
+        "My love for you has no bugs"
+        "Real programmers count from 0"
+        "while (alive) { eat(); sleep (); code ();}"
+        "Binary: It’s as easy as 01, 10, 11"
     )
     random_index=$((RANDOM % ${#jokes[@]}))
-    echo -e "\e[35mJoke of the Day:\e[0m ${jokes[$random_index]}"
+    center_text "$(color_text "magenta" "Joke of the Day: ${jokes[$random_index]}")"
 }
+
 
 # Function to display a random fun fact
 display_fun_fact() {
@@ -47,9 +102,19 @@ display_fun_fact() {
         "The first computer virus was created in 1983 by Fred Cohen as part of his PhD thesis."
         "The first programming language was Ada Lovelace's algorithm for Charles Babbage's Analytical Engine."
         "The first webcam was used to monitor a coffee pot at the University of Cambridge."
+        "The first computer mouse was made of wood."
+        "The Firefox logo isnt a fox. is Red panda."
+        "Nintendo made playing cards."
+        "As of 2017, 2.1 millions people still use dial up."
+        "Google's First Tweet was in binary"
+        "Motorola produced the first handheld mobile phone."
+        "YouTube uploads 72 hours of video every single minute. "
+        "The First Computer Weighed More Than 24,493.988 KG/27 Tons."
+        "The C Language was not called C at the beginning"
+        
     )
     random_index=$((RANDOM % ${#facts[@]}))
-    echo -e "\e[36mFun Fact:\e[0m ${facts[$random_index]}"
+    center_text "$(color_text "yellow" "Fun Fact: ${facts[$random_index]}")"
 }
 
 # Get memory and swap usage details
@@ -77,135 +142,188 @@ display_logo() {
     echo -e "\e[47m   |           |\e[0m"
     echo -e "\e[100m   |  _______  |\e[0m"
     echo -e "\e[101m   | /       \\ |\e[0m"
+    
+    
     echo -e "\e[102m   |/         \\|\e[0m"
     echo -e "\e[43m    \\_________/\e[0m"
     echo -e "\e[93m \e[0m"
     echo -e "\e[93m \e[0m"
 }
 
+# Function to display mounted drives and their usage
+display_mounted_drives() {
+    center_text "$(color_text "green" "  Mounted Drives:")"
+    local header="$(color_text "green" "      Filesystem                        Size       Used      Use%")"
+    center_text "$header"
+    local drives=$(df -h | awk 'NR>1 {printf "      %-30s %-10s %-10s %-10s\n", $1, $2, $3, $5}')
+    while IFS= read -r line; do
+        center_text "$line"
+    done <<< "$drives"
+}
+
+# Function to display disk I/O statistics
+display_disk_io_statistics() {
+    center_text "$(color_text "green" " Disk I/O Statistics:")"
+    local io_stats=$(iostat)
+    while IFS= read -r line; do
+        center_text "$line"
+    done <<< "$io_stats"
+}
+
 # Function to display system information including GPU temperatures
 display_info() {
     os=$(awk -F= '/^PRETTY_NAME=/{print $2}' /etc/os-release | tr -d '"')
-    echo -e "\e[33m  Operating System:\e[0m $os"
-    echo -e "\e[33m  Host:\e[0m $(cat /proc/sys/kernel/hostname)"
-    echo -e "\e[33m  Model:\e[0m $(cat /sys/devices/virtual/dmi/id/board_{name,vendor} | awk '!(NR%2){print$1,p}{p=$0}')"
-    echo -e "\e[33m  Logged-in Users:\e[0m"
-    w
-    echo -e "\e[33m  Kernel Name:\e[0m $(uname -s)"
-    echo -e "\e[33m  Kernel Version:\e[0m $(uname -r)"
-    echo -e "\e[33m  Kernel Release:\e[0m $(uname -v)"
-    echo -e "\e[33m  Kernel Architecture:\e[0m $(uname -m)"
-    echo -e "\e[33m  Uptime:\e[0m $(uptime -p)"
-    echo -e "\e[33m  Clock/Time:\e[0m $(date '+%Y-%m-%d %H:%M:%S')"
-    echo -e "\e[33m  Packages:\e[0m $(get_package_count)"
- echo -e "\e[33m  Resolution:\e[0m $(xrandr | grep -i  "*" )"
-    echo -e "\e[33m  Machine Hardware Platform:\e[0m $(uname -i)"
-    echo -e "\e[33m  Processor Type:\e[0m $(uname -p)"
-    echo -e "\e[33m  CPU:\e[0m $(grep "model name" /proc/cpuinfo | cut -d ' ' -f 3- | uniq)"
-    echo -e "\e[33m  CPU Cores:\e[0m $(awk '/^cpu cores/ {print $4; exit}' /proc/cpuinfo)"
-    echo -e "\e[33m  CPU Threads:\e[0m $(awk '/^processor/ {count++} END {print count}' /proc/cpuinfo)"
-    echo -e "\e[33m  Fan Speeds:\e[0m"
+    center_text "$(color_text "green" "  Operating System: $os")"
+    echo""
+    center_text "$(color_text "green" "  Host: $(cat /proc/sys/kernel/hostname)")"
+    echo""
+    center_text "$(color_text "green" "  Model: $(cat /sys/devices/virtual/dmi/id/board_{name,vendor} | awk '!(NR%2){print$1,p}{p=$0}')")"
+    echo""
+    center_text "$(color_text "green" "  Logged-in Users:")"
+    center_text "$(w)"
+    echo""
+    center_text "$(color_text "green" "  Kernel Name: $(uname -s)")"
+    echo""
+    center_text "$(color_text "green" "\e[33m  Kernel Version:\e[0m $(uname -r)")"
+    echo""
+    center_text "$(color_text "green" "\e[33m  Kernel Release:\e[0m $(uname -v)")"
+    echo""
+    center_text "$(color_text "green" "  Kernel Architecture: $(uname -m)")"
+    echo""
+    center_text "$(color_text "green" "  Uptime:\e[0m $(uptime -p)")"
+    echo""
+    center_text "$(color_text "green" " Clock/Time: $(date '+%Y-%m-%d %H:%M:%S')")"
+    echo""
+    center_text "$(color_text "green" "  Packages: $(get_package_count)")"
+    echo""
+    center_text "$(color_text "green" "  Resolution: $(xrandr | grep -i  "*" )")"
+    echo""
+    center_text "$(color_text "green" "  Machine Hardware Platform: $(uname -i)")"
+    echo""
+    center_text "$(color_text "green" "  Processor Type: $(uname -p)")"
+    center_text "$(color_text "green" "  CPU:\e[0m $(grep "model name" /proc/cpuinfo | cut -d ' ' -f 3- | uniq)")"
+    echo""
+    center_text "$(color_text "green" "  CPU Cores: $(awk '/^cpu cores/ {print $4; exit}' /proc/cpuinfo)")"
+    echo""
+    center_text "$(color_text "green" "  CPU Threads: $(awk '/^processor/ {count++} END {print count}' /proc/cpuinfo)")"
+    echo""
+    center_text "$(color_text "green" "  Fan Speeds:$(sensors | grep -i 'fan' | awk '{print "      ", $1, $2, $3, $4}')")"
+    echo""
     if command -v sensors &> /dev/null; then
-        fan_speeds=$(sensors | grep -i 'fan' | awk '{print "      ", $1, $2, $3, $4}')
-        if [ -n "$fan_speeds" ]; then
-            echo "$fan_speeds"
-        else
-            echo -e "\e[33m   No fan speed information available\e[0m"
-        fi
+      center_text "$(color_text "green" "  CPU Temperature:$(sensors | grep "core")")"
     else
-        echo -e "\e[33m   Not available (sensors not installed)\e[0m"
-    fi
-
-    if command -v sensors &> /dev/null; then
-        echo -e "\e[33m  CPU Temperature:\e[0m"
-        sensors | grep "Core"
-    else
-        echo -e "\e[33m  CPU Temperature:\e[0m Not available (lm_sensors not installed)"
+        center_text "$(color_text "green" "  CPU Temperature: Not available (lm_sensors not installed)")"
     fi
 
     # Display GPU temperatures using sensors
-    echo -e "\e[33m  GPU Temperatures:\e[0m"
-    if command -v sensors &> /dev/null; then
-        sensors | grep -i 'gpu'
-    else
-        echo -e "\e[33m   Not available (sensors not installed)\e[0m"
-    fi
+    center_text "$(color_text "green"   GPU Temperatures:" $(sensors | grep -i 'gpu')")"
+    echo""
+    center_text "$(color_text "green" "  GPU: $(lspci | grep VGA | cut -d ':' -f 3 | cut -d '[' -f 1,2 | sed 's/^ *//')")"
+    echo""
+    center_text "$(color_text "green" "  Memory:\e[0m $memory_percentage ($memory_usage)")"
+    echo""
+    center_text "$(color_text "green" "  Swap:\e[0m $swap_percentage ($swap_usage)")"
+    echo""
+        local disk_usage=$(df -h / | awk 'NR==2 {print "(" $5 " used) " $3 "/" $2 }')
+    center_text "$(color_text "green" "  Disk Usage: ${disk_usage}")"
+    echo""
+        local battery_info=$(upower -i $(upower -e | grep BAT) | grep --color=never -E "state|to full|percentage")
+    center_text "$(color_text "green" "  Battery:")"
+    while IFS= read -r line; do
+        center_text "$line"
+    done <<< "$battery_info"
+    echo""
+        center_text "$(color_text "green" "  Top Processes by CPU Usage:")"
+    ps -eo pid,%cpu,%mem,cmd --sort=-%cpu | head -n 11 | while IFS= read -r line; do
+        center_text "$line"
+    done
+    echo ""
+    center_text "$(color_text "green" "  Top Processes by Memory Usage:")"
+    ps -eo pid,%cpu,%mem,cmd --sort=-%mem | head -n 11 | while IFS= read -r line; do
+        center_text "$line"
+    done
+    echo ""
 
-    echo -e "\e[33m  GPU:\e[0m $(lspci | grep VGA | cut -d ':' -f 3 | cut -d '[' -f 1,2 | sed 's/^ *//')"
-    echo -e "\e[33m  Memory:\e[0m $memory_percentage ($memory_usage)"
-    echo -e "\e[33m  Swap:\e[0m $swap_percentage ($swap_usage)"
-    echo -e "\e[33m  Disk Usage:\e[0m $(df -h / | awk 'NR==2 {print "(" $5 " used) " $3 "/" $2 }')"
-    echo -e "\e[33m  Battery:\e[0m $(upower -i $(upower -e | grep BAT) | grep --color=never -E "state|to full|percentage")"
-    echo -e "\e[33m  Mounted Drives:\e[0m"
-    printf "      %-30s %-10s %-10s %-10s\n" "Filesystem" "Size" "Used" "Use%"
-    df -h | awk 'NR>1 {printf "      %-30s %-10s %-10s %-10s\n", $1, $2, $3, $5}'
-    echo -e "\e[33m Disk I/O Statistics:\e[0m"
-    iostat
-    [cpu/process]
-    echo -e "\e[33m  Top Processes by CPU Usage:\e[0m"
-    ps -eo pid,ppid,%cpu,%mem,cmd --sort=-%cpu | head -n 10
+# [Additional functionalities enable manually]
 
-    echo -e "\e[33m  Top Processes by Memory Usage:\e[0m"
-    ps -eo pid,ppid,%cpu,%mem,cmd --sort=-%mem | head -n 10
-
-    echo -e ""
-
-     # [Additional functionalities enable manually]
-    
-#[network]
-    #echo -e "\e[33m  Network Interfaces:\e[0m"
-    #ip addr show
-
-#[gpu]
-    # Display GPU temperatures for Nvidia, AMD, and Intel GPUs if available
-    #echo -e "\e[33m  GPU Temperatures:\e[0m"
-    
-    # Check and display Nvidia GPU temperature
-    #if command -v nvidia-smi &> /dev/null; then
-        #echo -e "\e[33m   Nvidia:\e[0m"
-        #nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader | awk '{print "      ", $1, "°C"}'
-    #fi
-
-    # Check and display AMD GPU temperature
-    #if command -v radeontop &> /dev/null; then
-        #echo -e "\e[33m   AMD:\e[0m"
-        #radeontop -l1 | grep "Temperature"
-    #fi
-
-    # Check and display Intel GPU temperature
-    #if command -v intel_gpu_top &> /dev/null; then
-        #echo -e "\e[33m   Intel:\e[0m"
-        #intel_gpu_top -s 1 | awk '/Rendering/ {print "      ", $7, "°C"}'
-    #fi
-
-#[logs]
-    #echo -e "\e[33m  System Logs (last 20 lines of syslog):\e[0m"
-    #tail -n 20 /var/log/syslog
-
-
- #[Uptime can be replaced with more detailed one]
-    #echo -e "\e[33m  :Uptime:\e[0m$(uptime)" 
-
-#[endable shell]
-    #echo -e "\e[32m Shell:\e[0m $SHELL"
-
-    # [user need to endable security isshues]
-    
-    # Display Firewall Information [user need to endable]
-    # echo -e "\e[33m  Firewall Information:\e[0m"
-    #echo -e "\e[33m   UFW Status:\e[0m"
-    #ufw status verbose | sed 's/^/      /'  # Adjust format as needed for your system's output
-    #echo -e "\e[33m   IPTables Rules:\e[0m"
-    #iptables -L -v -n | sed 's/^/      /'  # Adjust format as needed for your system's output
-    #echo -e "\e[33m   Firewalld Zones and Services:\e[0m"
-    #firewall-cmd --list-all-zones | sed 's/^/      /'  # Adjust format as needed for your system's output
-    #echo -e "\e[33m   Nftables Rules:\e[0m"
-    #nft list ruleset | sed 's/^/      /'  # Adjust format as needed for your system's output
-
-   #[ Resolution can be repleced with more detailed one ]
-    #echo -e "\e[33m Resolution:\e[0m $(hwinfo --monitor)"
+# [network]
+# Display Network Interfaces
+#display_network_interfaces() {
+#    center_text "$(color_text "yellow" "  Network Interfaces:")"
+#    ip addr show | sed 's/^/      /'
 }
 
+# [gpu]
+# Display GPU temperatures for Nvidia, AMD, and Intel GPUs if available
+#display_gpu_temperatures() {
+#    center_text "$(color_text "yellow" "  GPU Temperatures:")"
+    
+    # Check and display Nvidia GPU temperature
+#    if command -v nvidia-smi &> /dev/null; then
+#        center_text "$(color_text "yellow" "   Nvidia:")"
+#        nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader | awk '{print "      ", $1, "°C"}'
+#    fi
+
+    # Check and display AMD GPU temperature
+#    if command -v radeontop &> /dev/null; then
+#        center_text "$(color_text "yellow" "   AMD:")"
+#        radeontop -l1 | grep "Temperature" | sed 's/^/      /'
+#    fi
+
+    # Check and display Intel GPU temperature
+#    if command -v intel_gpu_top &> /dev/null; then
+#        center_text "$(color_text "yellow" "   Intel:")"
+#        intel_gpu_top -s 1 | awk '/Rendering/ {print "      ", $7, "°C"}'
+#    fi
+}
+
+# [logs]
+# Display System Logs (last 20 lines of syslog)
+#display_system_logs() {
+#    center_text "$(color_text "yellow" "  System Logs (last 20 lines of syslog):")"
+#    tail -n 20 /var/log/syslog | sed 's/^/      /'
+}
+
+# [uptime]
+# Display Uptime
+#display_uptime() {
+#    center_text "$(color_text "yellow" "  Uptime:") $(uptime)"
+}
+
+# [shell]
+# Display Shell
+#display_shell() {
+#   center_text "$(color_text "green" " Shell:") $SHELL"
+}
+
+# [firewall]
+# Display Firewall Information
+#display_firewall_info() {
+    #center_text "$(color_text "yellow" "  Firewall Information:")"
+    #center_text "$(color_text "yellow" "   UFW Status:")"
+    #ufw status verbose | sed 's/^/      /'  # Adjust format as needed for your system's output
+    #center_text "$(color_text "yellow" "   IPTables Rules:")"
+    #iptables -L -v -n | sed 's/^/      /'  # Adjust format as needed for your system's output
+    #center_text "$(color_text "yellow" "   Firewalld Zones and Services:")"
+    #firewall-cmd --list-all-zones | sed 's/^/      /'  # Adjust format as needed for your system's output
+    #center_text "$(color_text "yellow" "   Nftables Rules:")"
+    #nft list ruleset | sed 's/^/      /'  # Adjust format as needed for your system's output
+}
+
+# [resolution]
+# Display Resolution
+#display_resolution() {
+    #center_text "$(color_text "yellow" " Resolution:") $(hwinfo --monitor)"
+}
+
+# Example function calls (uncomment to use)
+#display_network_interfaces
+#display_gpu_temperatures
+#display_system_logs
+#display_uptime
+#display_shell
+#display_firewall_info
+#display_resolution
 
 # Function to get the package count based on package manager
 get_package_count() {
@@ -226,9 +344,9 @@ get_theme_info() {
     icon_theme=$(gsettings get org.gnome.desktop.interface icon-theme)
     cursor_theme=$(gsettings get org.gnome.desktop.interface cursor-theme)
 
-    echo -e "\e[33mGTK Theme:\e[0m $gtk_theme"
-    echo -e "\e[33mIcon Theme:\e[0m $icon_theme"
-    echo -e "\e[33mCursor Theme:\e[0m $cursor_theme"
+    center_text "$(color_text "green" "GTK Theme:$gtk_theme")"
+    center_text "$(color_text "green" "Icon Theme:$icon_theme")"
+    center_text "$(color_text "green" "Cursor Theme:$cursor_theme")"
 }
 
 # Main function to display output
@@ -236,7 +354,10 @@ main() {
     clear
     display_logo
     display_info
+    display_mounted_drives
+    display_disk_io_statistics
     get_theme_info
+    echo""
     display_quote
     display_joke
     display_fun_fact
