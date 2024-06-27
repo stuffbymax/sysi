@@ -1,13 +1,55 @@
 #!/bin/bash
 set -u
-#set -e
-#set -o pipefail
 
 # Function to calculate percentage
 get_percentage() {
     used=$1
     total=$2
     awk -v used="$used" -v total="$total" 'BEGIN { printf("%.2f%%", (used / total) * 100) }'
+}
+
+# Function to display a random quote
+display_quote() {
+    quotes=(
+         "Talk is cheap. Show me the code. - Linus Torvalds"
+        "Most good programmers do programming not because they expect to get paid or get adulation by the public, but because it is fun to program. - Linus Torvalds"
+        "Free software is software that respects your freedom and the social solidarity of your community. So it's free as in freedom. - Richard Stallman"
+        "Control over the use of one's ideas really constitutes control over other people's lives; and it is usually used to make their lives more difficult. - Richard Stallman"
+        "Given enough eyeballs, all bugs are shallow. - Eric S. Raymond"
+        "The next best thing to having good ideas is recognizing good ideas from your users. Sometimes the latter is better. - Eric S. Raymond"
+        "The Web as I envisaged it, we have not seen it yet. The future is still so much bigger than the past. - Tim Berners-Lee"
+        "The only way to make software secure, reliable, and fast is to put it out in the public domain and let people attack it, play with it, and break it. - Brian Behlendorf"
+        "I believe that openness is the key to creativity and innovation. - Mitchell Baker"
+    )
+    random_index=$((RANDOM % ${#quotes[@]}))
+    echo -e "\e[34mRandom Quote:\e[0m ${quotes[$random_index]}"
+}
+
+
+# Function to display a random programming joke
+display_joke() {
+    jokes=(
+        "Why do programmers prefer dark mode? Because light attracts bugs!"
+        "There are 10 types of people in the world: those who understand binary and those who don't."
+        "A SQL statement walks into a bar and sees two tables. It approaches, and asks, 'May I join you?'"
+        "Why do Java developers wear glasses? Because they don't see sharp."
+        "How many programmers does it take to change a light bulb? None. It's a hardware problem."
+    )
+    random_index=$((RANDOM % ${#jokes[@]}))
+    echo -e "\e[35mJoke of the Day:\e[0m ${jokes[$random_index]}"
+}
+
+# Function to display a random fun fact
+display_fun_fact() {
+    facts=(
+        "The first computer bug was an actual bug: a moth stuck in a Harvard Mark II in 1947."
+        "The first 1GB hard drive, announced in 1980, weighed over 500 pounds and cost 40000."
+        "The first computer virus was created in 1983 by Fred Cohen as part of his PhD thesis."
+        "The first programming language was Ada Lovelace's algorithm for Charles Babbage's Analytical Engine."
+        "The first webcam was used to monitor a coffee pot at the University of Cambridge."
+    )
+    random_index=$((RANDOM % ${#facts[@]}))
+    echo -e "\e[36mFun Fact:\e[0m ${facts[$random_index]}"
 }
 
 # Get memory and swap usage details
@@ -99,6 +141,13 @@ display_info() {
     df -h | awk 'NR>1 {printf "      %-30s %-10s %-10s %-10s\n", $1, $2, $3, $5}'
     echo -e "\e[33m Disk I/O Statistics:\e[0m"
     iostat
+    [cpu/process]
+    echo -e "\e[33m  Top Processes by CPU Usage:\e[0m"
+    ps -eo pid,ppid,%cpu,%mem,cmd --sort=-%cpu | head -n 10
+
+    echo -e "\e[33m  Top Processes by Memory Usage:\e[0m"
+    ps -eo pid,ppid,%cpu,%mem,cmd --sort=-%mem | head -n 10
+
     echo -e ""
 
      # [Additional functionalities enable manually]
@@ -106,12 +155,6 @@ display_info() {
 #[network]
     #echo -e "\e[33m  Network Interfaces:\e[0m"
     #ip addr show
-#[cpu/process]
-    #echo -e "\e[33m  Top Processes by CPU Usage:\e[0m"
-    #ps -eo pid,ppid,%cpu,%mem,cmd --sort=-%cpu | head -n 10
-
-    #echo -e "\e[33m  Top Processes by Memory Usage:\e[0m"
-    #ps -eo pid,ppid,%cpupre-built PC’s that are considered gaming systems the norm is 32G.,%mem,cmd --sort=-%mem | head -n 10
 
 #[gpu]
     # Display GPU temperatures for Nvidia, AMD, and Intel GPUs if available
@@ -194,6 +237,10 @@ main() {
     display_logo
     display_info
     get_theme_info
+    display_quote
+    display_joke
+    display_fun_fact
+    
 }
 
 # Execute main function
