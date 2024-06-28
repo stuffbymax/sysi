@@ -6,6 +6,8 @@ color_text() {
     local color=$1
     local text=$2
     case $color in
+        "black")
+            echo -e "\033[30m${text}\033[0m" ;;
         "red")
             echo -e "\033[31m${text}\033[0m" ;;
         "green")
@@ -20,10 +22,59 @@ color_text() {
             echo -e "\033[36m${text}\033[0m" ;;
         "white")
             echo -e "\033[37m${text}\033[0m" ;;
+        "bright_black")
+            echo -e "\033[90m${text}\033[0m" ;;
+        "bright_red")
+            echo -e "\033[91m${text}\033[0m" ;;
+        "bright_green")
+            echo -e "\033[92m${text}\033[0m" ;;
+        "bright_yellow")
+            echo -e "\033[93m${text}\033[0m" ;;
+        "bright_blue")
+            echo -e "\033[94m${text}\033[0m" ;;
+        "bright_magenta")
+            echo -e "\033[95m${text}\033[0m" ;;
+        "bright_cyan")
+            echo -e "\033[96m${text}\033[0m" ;;
+        "bright_white")
+            echo -e "\033[97m${text}\033[0m" ;;
+        "bg_black")
+            echo -e "\033[40m${text}\033[0m" ;;
+        "bg_red")
+            echo -e "\033[41m${text}\033[0m" ;;
+        "bg_green")
+            echo -e "\033[42m${text}\033[0m" ;;
+        "bg_yellow")
+            echo -e "\033[43m${text}\033[0m" ;;
+        "bg_blue")
+            echo -e "\033[44m${text}\033[0m" ;;
+        "bg_magenta")
+            echo -e "\033[45m${text}\033[0m" ;;
+        "bg_cyan")
+            echo -e "\033[46m${text}\033[0m" ;;
+        "bg_white")
+            echo -e "\033[47m${text}\033[0m" ;;
+        "bg_bright_black")
+            echo -e "\033[100m${text}\033[0m" ;;
+        "bg_bright_red")
+            echo -e "\033[101m${text}\033[0m" ;;
+        "bg_bright_green")
+            echo -e "\033[102m${text}\033[0m" ;;
+        "bg_bright_yellow")
+            echo -e "\033[103m${text}\033[0m" ;;
+        "bg_bright_blue")
+            echo -e "\033[104m${text}\033[0m" ;;
+        "bg_bright_magenta")
+            echo -e "\033[105m${text}\033[0m" ;;
+        "bg_bright_cyan")
+            echo -e "\033[106m${text}\033[0m" ;;
+        "bg_bright_white")
+            echo -e "\033[107m${text}\033[0m" ;;
         *)
             echo "$text" ;;
     esac
 }
+
 
 # Function to center text based on terminal width, handling multi-line input
 center_text() {
@@ -133,20 +184,19 @@ swap_percentage=$(get_percentage "$swap_used" "$swap_total")
 
 # Function to display ASCII art of a computer screen with SYSI
 display_logo() {
-    echo -e "\e[41m      _________\e[0m"
-    echo -e "\e[42m     /         \\ \e[0m"
-    echo -e "\e[43m    / _______   \\ \e[0m"
-    echo -e "\e[44m   | |       |  |\e[0m"
-    echo -e "\e[45m   | |  SYSI |  |\e[0m"
-    echo -e "\e[46m   | |_______|  |\e[0m"
-    echo -e "\e[47m   |           |\e[0m"
-    echo -e "\e[100m   |  _______  |\e[0m"
-    echo -e "\e[101m   | /       \\ |\e[0m"
-    echo -e "\e[102m   |/         \\|\e[0m"
-    echo -e "\e[43m    \\_________/\e[0m"
-    echo -e "\e[93m \e[0m"
-    echo -e "\e[93m \e[0m"
+    center_text "$(color_text "red" "      _________")"
+    center_text "$(color_text "green" "     /         |")"
+    center_text "$(color_text "yellow" "    / _______   |")"
+    center_text "$(color_text "blue" "   | |       |  |")"
+    center_text "$(color_text "magenta" "   | |  SYSI |  |")"
+    center_text "$(color_text "cyan" "   | |_______|  |")"
+    center_text "$(color_text "white" "   |           |")"
+    center_text "$(color_text "bright_red" "   |  _______  |")"
+    center_text "$(color_text "bright_yellow" "   | /       \\ |")"
+    center_text "$(color_text "bright_blue" "   |/         \\|")"
+    center_text "$(color_text "green" "    \\___________/")"
 }
+
 
 
 
@@ -196,13 +246,13 @@ display_info() {
     fi
 
     # Display GPU temperatures using sensors
-    center_text "$(color_text "green"   GPU Temperatures:" $(sensors | grep -i 'gpu')")"
+    center_text "$(color_text "green"  GPU Temperatures:" $(sensors | grep -i 'gpu')")"
     echo""
     center_text "$(color_text "green" "  GPU: $(lspci | grep VGA | cut -d ':' -f 3 | cut -d '[' -f 1,2 | sed 's/^ *//')")"
     echo""
-    center_text "$(color_text "green" "  Memory:\e[0m $memory_percentage ($memory_usage)")"
+    center_text "$(color_text "green" "  Memory: ($memory_percentage) ($memory_usage)")"
     echo""
-    center_text "$(color_text "green" "  Swap:\e[0m $swap_percentage ($swap_usage)")"
+    center_text "$(color_text "green" "  Swap: ($swap_percentage) ($swap_usage)")"
     echo""
         local disk_usage=$(df -h / | awk 'NR==2 {print "(" $5 " used) " $3 "/" $2 }')
     center_text "$(color_text "green" "  Disk Usage: ${disk_usage}")"
@@ -276,6 +326,8 @@ display_info() {
 
 
 # [uptime]
+
+
 # Display Uptime
 #    center_text "$(color_text "yellow" "  Uptime:") $(uptime)"
 
@@ -299,7 +351,6 @@ display_info() {
 
 # [resolution]
 # Display Resolution
-#display_resolution() {
     #center_text "$(color_text "yellow" " Resolution:") $(hwinfo --monitor)"
 
 }
