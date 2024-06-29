@@ -7,13 +7,12 @@
 - BluishHumility fixed the ai problem
 - DsturbD pointed the nerd-font problem
 
-[this section is made by BluishHumility
 
 # sysi Script
 
 README written by AI
 ----
-]
+
 
 # what i use AI for
 * readme
@@ -32,6 +31,7 @@ To run `sysi` without issues, ensure the following:
 
 1. **Operating System**:
    - Linux-based operating system (e.g., Ubuntu, Fedora, Debian, Arch).
+     
 1.5  **fonts**
      - nerd font needed
      - get nerd font https://www.nerdfonts.com/
