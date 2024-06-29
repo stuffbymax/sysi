@@ -7,7 +7,7 @@ color_text() {
     local text=$2
     case $color in
         "black")
-            echo -e "\033[30m${text}\033[0m" ;;
+            echo -e "\033[40m${text}\033[0m" ;;
         "red")
             echo -e "\033[31m${text}\033[0m" ;;
         "green")
@@ -239,17 +239,33 @@ display_info() {
     echo""
     center_text "$(color_text "green" "  Fan Speeds:$(sensors | grep -i 'fan' | awk '{print "      ", $1, $2, $3, $4}')")"
     echo""
-    if command -v sensors &> /dev/null; then
-      center_text "$(color_text "green" "  CPU Temperature:$(sensors | grep "core")")"
-    else
-        center_text "$(color_text "green" "  CPU Temperature: Not available (lm_sensors not installed)")"
-    fi
+if command -v sensors &> /dev/null; then
+     center_text "$(color_text "green" "  CPU Temperature:")"
+    # Collect all lines containing "Core" from sensors output
+    core_lines=$(sensors | grep "Core")
 
-    # Display GPU temperatures using sensors
-    center_text "$(color_text "green"  GPU Temperatures:" $(sensors | grep -i 'gpu')")"
-    echo""
+    # Iterate over each line and center it
+    while IFS= read -r line; do
+        center_text "$(color_text "red" "$line")"
+    done <<< "$core_lines"
+else
+    center_text "$(color_text "green" "  CPU Temperature: Not available (lm_sensors not installed)")"
+fi
+echo ""
+
     center_text "$(color_text "green" "  GPU: $(lspci | grep VGA | cut -d ':' -f 3 | cut -d '[' -f 1,2 | sed 's/^ *//')")"
     echo""
+    if ! command -v sensors &> /dev/null; then
+    center_text "$(color_text "red" "lmsensors not installed")"
+else
+    gpu_temp=$(sensors | grep -i 'gpu')
+    if [ -z "$gpu_temp" ]; then
+        center_text "$(color_text "red" "  No GPU temperature data available")"
+    else
+        center_text "$(color_text "green" "  GPU Temperatures:" "$gpu_temp")"
+       fi
+    fi
+    echo ""
     center_text "$(color_text "green" "  Memory: ($memory_percentage) ($memory_usage)")"
     echo""
     center_text "$(color_text "green" "  Swap: ($swap_percentage) ($swap_usage)")"
@@ -287,6 +303,7 @@ display_info() {
     while IFS= read -r line; do
         center_text "$line"
     done <<< "$drives"
+
 
 # [Additional functionalities enable manually]
 
@@ -352,32 +369,58 @@ display_info() {
 # [resolution]
 # Display Resolution
     #center_text "$(color_text "yellow" " Resolution:") $(hwinfo --monitor)"
+ 
+ 
 
 }
 
 
-# Function to get the package count based on package manager
 get_package_count() {
+    local package_count="N/A"
+
     if command -v dpkg-query &> /dev/null; then
-        echo $(dpkg-query -f '${binary:Package}\n' -W | wc -l)
+        package_count=$(dpkg-query -f '${binary:Package}\n' -W 2>/dev/null | wc -l)
     elif command -v rpm &> /dev/null; then
-        echo $(rpm -qa | wc -l)
+        package_count=$(rpm -qa 2>/dev/null | wc -l)
     elif command -v pacman &> /dev/null; then
-        echo $(pacman -Q | wc -l)
-    else
-        echo "N/A"
+        package_count=$(pacman -Q 2>/dev/null | wc -l)
     fi
+
+    echo "$package_count"
 }
 
 # Function to get information about various themes
 get_theme_info() {
-    gtk_theme=$(gsettings get org.gnome.desktop.interface gtk-theme)
-    icon_theme=$(gsettings get org.gnome.desktop.interface icon-theme)
-    cursor_theme=$(gsettings get org.gnome.desktop.interface cursor-theme)
+    local gtk_theme icon_theme cursor_theme shell_theme
 
-    center_text "$(color_text "green" "GTK Theme:$gtk_theme")"
-    center_text "$(color_text "green" "Icon Theme:$icon_theme")"
-    center_text "$(color_text "green" "Cursor Theme:$cursor_theme")"
+    # Get GTK theme
+    gtk_theme=$(gsettings get org.gnome.desktop.interface gtk-theme 2>/dev/null)
+    gtk_theme="${gtk_theme//\'/}"  # Remove single quotes from the output
+
+    # Get icon theme
+    icon_theme=$(gsettings get org.gnome.desktop.interface icon-theme 2>/dev/null)
+    icon_theme="${icon_theme//\'/}"  # Remove single quotes from the output
+
+    # Get cursor theme
+    cursor_theme=$(gsettings get org.gnome.desktop.interface cursor-theme 2>/dev/null)
+    cursor_theme="${cursor_theme//\'/}"  # Remove single quotes from the output
+
+
+    # Display themes using center_text function
+    center_text "$(color_text "green" "GTK Theme: $gtk_theme")"
+    center_text "$(color_text "green" "Icon Theme: $icon_theme")"
+    center_text "$(color_text "green" "Cursor Theme: $cursor_theme")"
+    
+}
+
+
+    # Easter egg for ASUSTeK model
+    get_model() {
+    model=$(cat /sys/devices/virtual/dmi/id/board_{name,vendor} | awk '!(NR%2){print$1,p}{p=$0}')
+    if [[ "$model" == *"ASUSTeK"* ]]; then
+        echo ""
+        center_text "$(color_text "black" "Easter Egg: Asus more like ASSUS")"
+    fi
 }
 
 # Main function to display output
@@ -386,6 +429,7 @@ main() {
     display_logo
     display_info
     get_theme_info
+    get_model
     display_quote
     display_joke
     display_fun_fact
