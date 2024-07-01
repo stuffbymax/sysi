@@ -123,7 +123,7 @@ Install necessary utilities using your package manager. Examples:
 | **CPU Cores/Threads**       | No                         | Yes                            |
 | **Fan Speeds**              | No                         | Yes (if lm_sensors installed)  |
 | **GPU Info**                | Yes                        | Yes                            |
-| **GPU Temperatures**        | No                         | Yes (Nvidia, AMD, Intel GPUs)  |
+| **GPU Temperatures**        | No                         | Yes (Nvidia, AMD, Intel GPUs and if lm_sensors installed)  |
 | **Memory Info**             | Yes                        | Yes                            |
 | **Disk Usage**              | Yes                        | Yes                            |
 | **Battery Info**            | Yes                        | Yes                            |
@@ -135,7 +135,7 @@ Install necessary utilities using your package manager. Examples:
 |**disk I/O statistics:**     | no                         | yes                            |
 | **Firewall Information**    | no                         | yes                            |
 | **Customization**           | High (config file)         | High (script editing)          |
-| **Ease of Use**             | High (simple command)      | Moderate (run script manually) |
+| **Ease of Use**             | High (simple command)      | High (simple command) 	        |
 
 ## Neofetch
 
