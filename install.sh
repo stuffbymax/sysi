@@ -22,6 +22,9 @@ install_packages() {
         arch|endeavouros|manjaro)
             yay -S --noconfirm "${packages[@]}"
             ;;
+        opensuse)
+            sudo zypper install -y "${packages[@]}"
+            ;;
         *)
             echo "Unsupported distribution: $distribution"
             exit 1
@@ -41,12 +44,6 @@ get_distribution() {
     fi
 }
 
-# Function to install Iosevka Nerd Font using yay on Arch-based distributions
-install_nerdfont_arch() {
-    echo "Installing Iosevka Nerd Font using yay..."
-    sudo pacman -S ttf-iosevkaterm-nerd
-}
-
 # Function to install Iosevka Nerd Font based on distribution
 install_nerdfont() {
     local distribution=$1
@@ -58,7 +55,10 @@ install_nerdfont() {
             sudo dnf install -y iosevka-fonts
             ;;
         arch|endeavouros|manjaro)
-            install_nerdfont_arch
+            sudo pacman -S --noconfirm ttf-iosevka-nerd
+            ;;
+        opensuse)
+            sudo zypper install -y fonts-iosevka-nerd
             ;;
         *)
             echo "Unsupported distribution: $distribution"
@@ -84,7 +84,7 @@ if [[ ${#missing_deps[@]} -gt 0 ]]; then
     distribution=$(get_distribution)
 
     case $distribution in
-        debian|ubuntu|arch|endeavouros|manjaro|fedora)
+        debian|ubuntu|arch|endeavouros|manjaro|fedora|opensuse)
             install_packages "$distribution" "${missing_deps[@]}"
             ;;
         *)
