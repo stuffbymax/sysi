@@ -1,18 +1,19 @@
  # people who would prefer to stay anonymous that helped.
  - mz provided get_percentage stuff and set -u set -e set -o pipefail
  - sy pointed that storage % was on right
- - tg helped a lot mz helped a lot and sy helped a lot i just cant remember
+ - tg helped a lot mz helped a lot and sy helped a lot
    
 # people that helped
 - BluishHumility fixed the ai problem
 - DsturbD pointed the nerd-font problem
 
+[this section is made by BluishHumility
 
 # sysi Script
 
 README written by AI
 ----
-
+]
 
 # what i use AI for
 * readme
@@ -31,7 +32,6 @@ To run `sysi` without issues, ensure the following:
 
 1. **Operating System**:
    - Linux-based operating system (e.g., Ubuntu, Fedora, Debian, Arch).
-     
 1.5  **fonts**
      - nerd font needed
      - get nerd font https://www.nerdfonts.com/
@@ -123,7 +123,7 @@ Install necessary utilities using your package manager. Examples:
 | **CPU Cores/Threads**       | No                         | Yes                            |
 | **Fan Speeds**              | No                         | Yes (if lm_sensors installed)  |
 | **GPU Info**                | Yes                        | Yes                            |
-| **GPU Temperatures**        | No                         | Yes (Nvidia, AMD, Intel GPUs and if lm_sensors installed)  |
+| **GPU Temperatures**        | No                         | Yes (Nvidia, AMD, Intel GPUs)  |
 | **Memory Info**             | Yes                        | Yes                            |
 | **Disk Usage**              | Yes                        | Yes                            |
 | **Battery Info**            | Yes                        | Yes                            |
@@ -135,7 +135,7 @@ Install necessary utilities using your package manager. Examples:
 |**disk I/O statistics:**     | no                         | yes                            |
 | **Firewall Information**    | no                         | yes                            |
 | **Customization**           | High (config file)         | High (script editing)          |
-| **Ease of Use**             | High (simple command)      | High (simple command) 	        |
+| **Ease of Use**             | High (simple command)      | Moderate (run script manually) |
 
 ## Neofetch
 

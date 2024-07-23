@@ -22,9 +22,6 @@ install_packages() {
         arch|endeavouros|manjaro)
             yay -S --noconfirm "${packages[@]}"
             ;;
-        opensuse)
-            sudo zypper install -y "${packages[@]}"
-            ;;
         *)
             echo "Unsupported distribution: $distribution"
             exit 1
@@ -44,6 +41,12 @@ get_distribution() {
     fi
 }
 
+# Function to install Iosevka Nerd Font using yay on Arch-based distributions
+install_nerdfont_arch() {
+    echo "Installing Iosevka Nerd Font..."
+    sudo pacman -S ttf-iosevkaterm-nerd
+}
+
 # Function to install Iosevka Nerd Font based on distribution
 install_nerdfont() {
     local distribution=$1
@@ -55,10 +58,7 @@ install_nerdfont() {
             sudo dnf install -y iosevka-fonts
             ;;
         arch|endeavouros|manjaro)
-            sudo pacman -S --noconfirm ttf-iosevka-nerd
-            ;;
-        opensuse)
-            sudo zypper install -y fonts-iosevka-nerd
+            install_nerdfont_arch
             ;;
         *)
             echo "Unsupported distribution: $distribution"
@@ -84,7 +84,7 @@ if [[ ${#missing_deps[@]} -gt 0 ]]; then
     distribution=$(get_distribution)
 
     case $distribution in
-        debian|ubuntu|arch|endeavouros|manjaro|fedora|opensuse)
+        debian|ubuntu|arch|endeavouros|manjaro|fedora)
             install_packages "$distribution" "${missing_deps[@]}"
             ;;
         *)
@@ -110,3 +110,4 @@ sudo chmod +x /usr/local/bin/sysi
 
 echo "SYSI installation completed."
 echo "You can now run 'sysi' to display system information."
+
