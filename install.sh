@@ -41,10 +41,10 @@ get_distribution() {
     fi
 }
 
-# Function to install Iosevka Nerd Font using yay on Arch-based distributions
+# Function to install Iosevka Nerd Font on Arch-based distributions
 install_nerdfont_arch() {
     echo "Installing Iosevka Nerd Font..."
-    sudo pacman -S ttf-iosevkaterm-nerd
+    sudo pacman -S ttf-iosevka-nerd
 }
 
 # Function to install Iosevka Nerd Font based on distribution
