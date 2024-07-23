@@ -214,15 +214,15 @@ else
     while IFS= read -r line; do
         center_text "$line"
     done <<< "$drives"
-
+echo""
 
 # [Additional functionalities enable manually]
 
 # [network]
-# Display Network Interfaces
+#Display Network Interfaces
 #    center_text "$(color_text "bg_yellow" "  Network Interfaces:")"
 #    ip addr show | sed 's/^/      /'
-
+#echo""
 
 # [gpu]
 # Display GPU temperatures for Nvidia, AMD, and Intel GPUs if available
@@ -258,15 +258,15 @@ else
 
 # Display Uptime
 #    center_text "$(color_text "bg_yellow" "  Uptime:") $(uptime)"
-
+#echo ""
 
 # [shell]
 # Display Shell
-#   center_text "$(color_text "bg_green" " Shell:") $SHELL"
+ #  center_text "$(color_text "bg_green" " Shell:") $SHELL"
 
 
 # [firewall]
-# Display Firewall Information
+# Display Firewall Information requires password
     #center_text "$(color_text "bg_yellow" "  Firewall Information:")"
     #center_text "$(color_text "bg_yellow" "   UFW Status:")"
     #ufw status verbose | sed 's/^/      /'  # Adjust format as needed for your system's output
@@ -279,7 +279,9 @@ else
 
 # [resolution]
 # Display Resolution
-    #center_text "$(color_text "bg_yellow" " Resolution:") $(hwinfo --monitor)"
+#    center_text "$(color_text "bg_yellow" " Resolution")"
+#    center_text "$(color_text "bg_yellow"  "\e[0m $(hwinfo --monitor)")"
+#    echo""
  
  
 
@@ -305,6 +307,7 @@ display_quote() {
     )
     random_index=$((RANDOM % ${#quotes[@]}))
   center_text "$(color_text "bg_cyan" "Random Quote: ${quotes[$random_index]}")"
+  echo""
 }
 
 
@@ -329,6 +332,7 @@ display_joke() {
     )
     random_index=$((RANDOM % ${#jokes[@]}))
     center_text "$(color_text "bg_magenta" "Joke of the Day: ${jokes[$random_index]}")"
+    echo""
 }
 
 
@@ -353,6 +357,7 @@ display_fun_fact() {
     )
     random_index=$((RANDOM % ${#facts[@]}))
     center_text "$(color_text "bg_yellow" "Fun Fact: ${facts[$random_index]}")"
+    echo""
 }
 
 
@@ -410,9 +415,10 @@ get_theme_info() {
 
     # Display themes using center_text function
     center_text "$(color_text "bg_red" "GTK Theme: $gtk_theme")"
+    echo""
     center_text "$(color_text "bg_green" "Icon Theme: $icon_theme")"
+    echo""
     center_text "$(color_text "bg_blue" "Cursor Theme: $cursor_theme")"
-    
     
     
 
@@ -427,9 +433,10 @@ get_theme_info() {
         echo ""
         center_text "$(color_text "bg_bright_black" "Asus more like ASSUS")"
     fi
+    echo""
 }
 
-
+#this function is not complete because there will be czech and english version so that why the czech flag 
 czef() {
  #Define the colored blocks for the Czech flag
 c1=$(color_text "bg_white" "                 ")  # White background
