@@ -1,5 +1,10 @@
+#the install script is made by AI so expect to not work 100%
+
+
 #!/bin/bash
 
+echo "the install script is made by AI so expect to not work 100%"
+sleep 2
 # Function to check if a command exists
 command_exists() {
     command -v "$1" &> /dev/null
@@ -41,10 +46,10 @@ get_distribution() {
     fi
 }
 
-# Function to install Iosevka Nerd Font on Arch-based distributions
+# Function to install Iosevka Nerd Font  on Arch-based distributions
 install_nerdfont_arch() {
     echo "Installing Iosevka Nerd Font..."
-    sudo pacman -S ttf-iosevka-nerd
+    sudo pacman -S ttf-iosevka-nerd 
 }
 
 # Function to install Iosevka Nerd Font based on distribution
