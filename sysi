@@ -92,7 +92,7 @@ display_logo() {
 
 
 
-# Function to display system information including GPU temperatures
+# Function to display system informations
 display_info() {
     os=$(awk -F= '/^PRETTY_NAME=/{print $2}' /etc/os-release | tr -d '"')
     center_text "$(color_text "bg_green" "  Operating System")"
@@ -152,11 +152,12 @@ display_info() {
 if command -v sensors &> /dev/null; then
      center_text "$(color_text "bg_bright_blue" "  CPU Temperature")"
     # Collect all lines containing "Core" from sensors output
+    echo ""
     core_lines=$(sensors | grep "Core")
 
     # Iterate over each line and center it
     while IFS= read -r line; do
-        center_text "$(color_text "bg_white" "$line")"
+        center_text "$(color_text "bg_red" "$line")"
     done <<< "$core_lines"
 else
     center_text "$(color_text "bg_red" "  CPU Temperature: Not available (lm_sensors not installed)")"
@@ -206,8 +207,9 @@ else
     while IFS= read -r line; do
         center_text "$line"
     done <<< "$io_stats"
-    
+    echo ""
     center_text "$(color_text "bg_bright_black" "  Mounted Drives")"
+    echo ""
     local header="$(color_text "bg_blue" "      Filesystem                        Size       Used      Use%")"
     center_text "$header"
     local drives=$(df -h | awk 'NR>1 {printf "      %-30s %-10s %-10s %-10s\n", $1, $2, $3, $5}')
@@ -396,7 +398,7 @@ fi
     echo "$pkgs" "$source"
 }
 
-# Function to get information about various themes
+# Function to get information about various gnome themes 
 get_theme_info() {
     local gtk_theme icon_theme cursor_theme shell_theme
 
