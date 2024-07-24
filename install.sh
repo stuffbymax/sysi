@@ -1,22 +1,24 @@
-#the install script is made by AI so expect to not work 100%
-
-
 #!/bin/bash
 
 echo "the install script is made by AI so expect to not work 100%"
 sleep 2
+
 # Function to check if a command exists
 command_exists() {
     command -v "$1" &> /dev/null
 }
 
-# Function to install packages based on distribution
+# Function to install packages based on environment (Termux or Linux distribution)
 install_packages() {
-    local distribution=$1
+    local environment=$1
     shift
     local packages=("$@")
 
-    case $distribution in
+    case $environment in
+        termux)
+            pkg update
+            pkg install -y "${packages[@]}"
+            ;;
         debian|ubuntu)
             sudo apt update
             sudo apt install -y "${packages[@]}"
@@ -28,15 +30,17 @@ install_packages() {
             yay -S --noconfirm "${packages[@]}"
             ;;
         *)
-            echo "Unsupported distribution: $distribution"
+            echo "Unsupported environment or distribution: $environment"
             exit 1
             ;;
     esac
 }
 
-# Determine the Linux distribution
-get_distribution() {
-    if command_exists lsb_release; then
+# Determine if running in Termux or a Linux distribution
+get_environment() {
+    if [ -n "$TERMUX_VERSION" ]; then
+        echo "termux"
+    elif command_exists lsb_release; then
         lsb_release -si | tr '[:upper:]' '[:lower:]'
     elif [ -e /etc/os-release ]; then
         source /etc/os-release
@@ -46,16 +50,21 @@ get_distribution() {
     fi
 }
 
-# Function to install Iosevka Nerd Font  on Arch-based distributions
-install_nerdfont_arch() {
-    echo "Installing Iosevka Nerd Font..."
-    sudo pacman -S ttf-iosevka-nerd 
+# Function to install Iosevka Nerd Font in Termux
+install_nerdfont_termux() {
+    echo "Downloading and installing Iosevka Nerd Font..."
+    mkdir -p ~/.local/share/fonts
+    curl -fLo ~/.local/share/fonts/IosevkaNerdFont.ttf https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Iosevka.zip
+    termux-reload-settings
 }
 
-# Function to install Iosevka Nerd Font based on distribution
+# Function to install Iosevka Nerd Font based on environment
 install_nerdfont() {
-    local distribution=$1
-    case $distribution in
+    local environment=$1
+    case $environment in
+        termux)
+            install_nerdfont_termux
+            ;;
         debian|ubuntu)
             sudo apt install -y fonts-iosevka
             ;;
@@ -63,17 +72,17 @@ install_nerdfont() {
             sudo dnf install -y iosevka-fonts
             ;;
         arch|endeavouros|manjaro)
-            install_nerdfont_arch
+            sudo pacman -S ttf-iosevka-nerd
             ;;
         *)
-            echo "Unsupported distribution: $distribution"
+            echo "Unsupported environment or distribution: $environment"
             exit 1
             ;;
     esac
 }
 
 # Check dependencies
-dependencies=("lm_sensors" "ttf-iosevka-nerd" "sysstat")
+dependencies=("lm_sensors" "sysstat")
 
 # Find missing dependencies
 missing_deps=()
@@ -86,14 +95,14 @@ done
 # Install missing dependencies
 if [[ ${#missing_deps[@]} -gt 0 ]]; then
     echo "Installing missing dependencies: ${missing_deps[*]}"
-    distribution=$(get_distribution)
+    environment=$(get_environment)
 
-    case $distribution in
-        debian|ubuntu|arch|endeavouros|manjaro|fedora)
-            install_packages "$distribution" "${missing_deps[@]}"
+    case $environment in
+        termux|debian|ubuntu|arch|endeavouros|manjaro|fedora)
+            install_packages "$environment" "${missing_deps[@]}"
             ;;
         *)
-            echo "Unsupported distribution: $distribution"
+            echo "Unsupported environment or distribution: $environment"
             exit 1
             ;;
     esac
@@ -102,17 +111,17 @@ fi
 # Check for and install Iosevka Nerd Font
 echo "Checking for Iosevka Nerd Font..."
 if ! fc-list : file family | grep -q "Iosevka"; then
-    distribution=$(get_distribution)
-    install_nerdfont "$distribution"
+    environment=$(get_environment)
+    install_nerdfont "$environment"
 else
     echo "Iosevka Nerd Font is already installed."
 fi
 
 # Install SYSI script
 echo "Installing SYSI script..."
-sudo cp sysi /usr/local/bin/sysi
-sudo chmod +x /usr/local/bin/sysi
+mkdir -p ~/bin
+cp sysi ~/bin/sysi
+chmod +x ~/bin/sysi
 
 echo "SYSI installation completed."
 echo "You can now run 'sysi' to display system information."
-
