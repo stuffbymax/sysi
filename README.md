@@ -86,21 +86,6 @@ sudo pacman -Syu
 3. **Root or Sudo Access**:
    - Some commands (especially those fetching GPU temperatures) may require root or sudo privileges.
 
-## Installation of Dependencies
-
-Install necessary utilities using your package manager. Examples:
-
-# Install lm-sensors for CPU temperature
-``sudo apt-get install lm-sensors``
-
-# Install nvidia-smi for Nvidia GPU temperature
-``sudo apt-get install nvidia-smi``
-
-# Install radeontop for AMD GPU temperature
-``sudo apt-get install radeontop``
-
-# Install intel-gpu-tools for Intel GPU temperature
-``sudo apt-get install intel-gpu-tools``
 
 ## Features
 - **Operating System Information**: Displays OS name, kernel version, architecture, and more.
