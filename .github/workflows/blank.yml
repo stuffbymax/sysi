@@ -1,5 +1,8 @@
-            - name: Archlinux MAKEPKG builder
+            - name: Arch makepkg
   # You may pin to the exact commit or the version.
-  # uses: ktcar214/arch-makepkg-action@01093b0aa39f586b24db1501b284ac7439d2f90c
-  uses: ktcar214/arch-makepkg-action@v1.0.11
+  # uses: py7hon/arch-makepkg@9891e6a52a6f5e2d1729f650198628a19ae261b4
+  uses: py7hon/arch-makepkg@v0.0.2
+  with:
+    # Path to directory containing PKGBUILD file
+    path: # default is 
           
