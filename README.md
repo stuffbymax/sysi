@@ -47,6 +47,39 @@ To run `sysi` without issues, ensure the following:
      - `nvidia-smi` for Nvidia GPU temperature.
      - `radeontop` for AMD GPU temperature.
      - `intel-gpu-tools` for Intel GPU temperature.
+    
+      # Dependencies for Arch linux System
+
+This script relies on several utilities and commands available on Arch Linux. Below is a list of required dependencies along with installation instructions.
+
+## Required Packages
+
+- `bash`
+- `awk`
+- `free`
+- `tput`
+- `grep`
+- `sensors`
+- `uptime`
+- `date`
+- `uname`
+- `xrandr`
+
+## Installation Instructions
+
+To ensure all dependencies are installed on your Arch Linux system, you can use the following commands:
+
+``
+sudo pacman -S bash gawk procps-ng grep lm_sensors util-linux coreutils xorg-xrandr
+``
+
+### Updating the Package Database
+
+```
+sudo pacman -Syu
+```
+    
+
 
 3. **Root or Sudo Access**:
    - Some commands (especially those fetching GPU temperatures) may require root or sudo privileges.
