@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "the install script is made by AI so expect to not work 100%"
+echo "The install script is made by AI so expect it to not work 100%"
 sleep 2
 
 # Function to check if a command exists
@@ -17,17 +17,17 @@ install_packages() {
     case $environment in
         termux)
             pkg update
-            pkg install -y "${packages[@]}"
+            pkg install  "${packages[@]}"
             ;;
         debian|ubuntu)
             sudo apt update
-            sudo apt install -y "${packages[@]}"
+            sudo apt install "${packages[@]}"
             ;;
         fedora)
             sudo dnf install -y "${packages[@]}"
             ;;
         arch|endeavouros|manjaro)
-            yay -S --noconfirm "${packages[@]}"
+            sudo pacman -Syu --noconfirm "${packages[@]}"
             ;;
         *)
             echo "Unsupported environment or distribution: $environment"
@@ -72,7 +72,7 @@ install_nerdfont() {
             sudo dnf install -y iosevka-fonts
             ;;
         arch|endeavouros|manjaro)
-            sudo pacman -S ttf-iosevka-nerd
+            sudo pacman -S --noconfirm ttf-iosevka-nerd
             ;;
         *)
             echo "Unsupported environment or distribution: $environment"
@@ -80,6 +80,14 @@ install_nerdfont() {
             ;;
     esac
 }
+
+# Check if curl and sudo are installed
+for cmd in curl sudo; do
+    if ! command_exists "$cmd"; then
+        echo "Error: $cmd is not installed."
+        exit 1
+    fi
+done
 
 # Check dependencies
 dependencies=("lm_sensors" "sysstat")
@@ -110,7 +118,7 @@ fi
 
 # Check for and install Iosevka Nerd Font
 echo "Checking for Iosevka Nerd Font..."
-if ! fc-list : file family | grep -q "Iosevka"; then
+if ! fc-list : file family | grep -qi "Iosevka"; then
     environment=$(get_environment)
     install_nerdfont "$environment"
 else
