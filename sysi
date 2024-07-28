@@ -1,9 +1,6 @@
 #!/bin/bash
 set -u
 
-
-
-
 # Function to add colors to text
 color_text() {
     local color=$1
@@ -76,21 +73,19 @@ swap_percentage=$(get_percentage "$swap_used" "$swap_total")
 
 # Function to display ASCII art of a computer screen with SYSI
 display_logo() {
-    center_text "$(color_text "red" "      _________")"
-    center_text "$(color_text "green" "     /         |")"
-    center_text "$(color_text "yellow" "    / _______   |")"
-    center_text "$(color_text "blue" "   | |       |  |")"
-    center_text "$(color_text "magenta" "   | |  SYSI |  |")"
-    center_text "$(color_text "cyan" "   | |_______|  |")"
-    center_text "$(color_text "white" "   |           |")"
-    center_text "$(color_text "bright_red" "   |  _______  |")"
-    center_text "$(color_text "bright_yellow" "   | /       \\ |")"
-    center_text "$(color_text "bright_blue" "   |/         \\|")"
-    center_text "$(color_text "green" "    \\___________/")"
+    center_text "$(color_text "bg_red" "      _________")"
+    center_text "$(color_text "bg_green" "     /         |")"
+    center_text "$(color_text "bg_yellow" "    / _______   |")"
+    center_text "$(color_text "bg_blue" "   | |       |  |")"
+    center_text "$(color_text "bg_magenta" "   | |  SYSI |  |")"
+    center_text "$(color_text "bg_cyan" "   | |_______|  |")"
+    center_text "$(color_text "bg_white" "   |           |")"
+    center_text "$(color_text "bg_bright_red" "   |  _______  |")"
+    center_text "$(color_text "bg_bright_yellow" "   | /       \\ |")"
+    center_text "$(color_text "bg_bright_blue" "   |/         \\|")"
+    center_text "$(color_text "bg_green" "    \\___________/")"
+    echo ""
 }
-
-
-
 
 # Function to display system informations
 display_info() {
