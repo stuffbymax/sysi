@@ -7,13 +7,13 @@
 - BluishHumility fixed the ai problem
 - DsturbD pointed the nerd-font problem
 
-[this section is made by BluishHumility
+
 
 # sysi Script
 
 README written by AI
 ----
-]
+
 
 # what i use AI for
 * readme
