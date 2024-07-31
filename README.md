@@ -1,5 +1,3 @@
-# the install script have a some problems i am fixing it 
- 
  # people who would prefer to stay anonymous that helped.
  - mz provided get_percentage stuff and set -u set -e set -o pipefail
  - sy pointed that storage % was on right
@@ -49,43 +47,25 @@ To run `sysi` without issues, ensure the following:
      - `nvidia-smi` for Nvidia GPU temperature.
      - `radeontop` for AMD GPU temperature.
      - `intel-gpu-tools` for Intel GPU temperature.
-    
-      # Dependencies for Arch linux System
-
-This script relies on several utilities and commands available on Arch Linux. Below is a list of required dependencies along with installation instructions.
-
-## Required Packages
-
-- `bash`
-- `awk`
-- `free`
-- `tput`
-- `grep`
-- `sensors`
-- `uptime`
-- `date`
-- `uname`
-- `xrandr`
-
-## Installation Instructions
-
-To ensure all dependencies are installed on your Arch Linux system, you can use the following commands:
-
-``
-sudo pacman -S bash gawk procps-ng grep lm_sensors util-linux coreutils xorg-xrandr
-``
-
-### Updating the Package Database
-
-```
-sudo pacman -Syu
-```
-    
-
 
 3. **Root or Sudo Access**:
    - Some commands (especially those fetching GPU temperatures) may require root or sudo privileges.
 
+## Installation of Dependencies
+
+Install necessary utilities using your package manager. Examples:
+
+# Install lm-sensors for CPU temperature
+``sudo apt-get install lm-sensors``
+
+# Install nvidia-smi for Nvidia GPU temperature
+``sudo apt-get install nvidia-smi``
+
+# Install radeontop for AMD GPU temperature
+``sudo apt-get install radeontop``
+
+# Install intel-gpu-tools for Intel GPU temperature
+``sudo apt-get install intel-gpu-tools``
 
 ## Features
 - **Operating System Information**: Displays OS name, kernel version, architecture, and more.

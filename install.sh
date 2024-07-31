@@ -17,17 +17,20 @@ install_packages() {
     case $environment in
         termux)
             pkg update
-            pkg install  "${packages[@]}"
+            pkg install -y "${packages[@]}"
             ;;
         debian|ubuntu)
             sudo apt update
-            sudo apt install "${packages[@]}"
+            sudo apt install -y "${packages[@]}"
             ;;
         fedora)
             sudo dnf install -y "${packages[@]}"
             ;;
         arch|endeavouros|manjaro)
             sudo pacman -Syu --noconfirm "${packages[@]}"
+            ;;
+            opensuse)
+            sudo zypper install -y "${packages[@]}"
             ;;
         *)
             echo "Unsupported environment or distribution: $environment"
@@ -54,7 +57,9 @@ get_environment() {
 install_nerdfont_termux() {
     echo "Downloading and installing Iosevka Nerd Font..."
     mkdir -p ~/.local/share/fonts
-    curl -fLo ~/.local/share/fonts/IosevkaNerdFont.ttf https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Iosevka.zip
+    curl -fLo ~/.local/share/fonts/IosevkaNerdFont.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Iosevka.zip
+    unzip ~/.local/share/fonts/IosevkaNerdFont.zip -d ~/.local/share/fonts/
+    rm ~/.local/share/fonts/IosevkaNerdFont.zip
     termux-reload-settings
 }
 

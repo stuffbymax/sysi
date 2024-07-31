@@ -1,0 +1,8 @@
+1. you're assuming locales in the output of processes
+2. you're (at times) assuming the presence of anything (package manager binary) as indicator for the system, https://archlinux.org/packages/extra/x86_64/dpkg/
+3. indentions, comments etc. are all over the place
+4. you're single-quoting variables
+5. you're assigning variables through subshell calls, multiple times for the same source, one variable at a time. "man read"
+6. you're assuming gnome in your  theme stuff
+7. There's a distinct 'center_text "$(color_text ' pattern that gets used A LOT - you can tidy that
+8. massive cat abuse
