@@ -1,4 +1,5 @@
-#contribute https://github.com/stuffbymax/sysi/blob/main/CONTRIBUTING.md
+[contribute](https://github.com/stuffbymax/sysi/blob/main/CONTRIBUTING.md)
+
  
  # people who would prefer to stay anonymous that helped.
  - mz provided get_percentage stuff and set -u set -e set -o pipefail
