@@ -1,6 +1,3 @@
-[contribute](https://github.com/stuffbymax/sysi/blob/main/CONTRIBUTING.md)
-
- 
  # people who would prefer to stay anonymous that helped.
  - mz provided get_percentage stuff and set -u set -e set -o pipefail
  - sy pointed that storage % was on right
@@ -10,13 +7,13 @@
 - BluishHumility fixed the ai problem
 - DsturbD pointed the nerd-font problem
 
-
+[this section is made by BluishHumility
 
 # sysi Script
 
 README written by AI
 ----
-
+]
 
 # what i use AI for
 * readme
