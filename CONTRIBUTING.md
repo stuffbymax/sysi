@@ -7,7 +7,7 @@ Thank you for your interest in contributing to sysi! Here are some simple guidel
 1. **Fork the Repository**: Fork the repo and create your own copy.
 2. **Clone the Repository**: Clone your fork to your local machine.
     ```bash
-    git clone https://github.com/your-username/your-repo-name.git
+    git clone [https://github.com/your-username/your-repo-name.git](https://github.com/stuffbymax/sysi.git)
     ```
 3. **Create a Branch**: Always create a new branch for your work.
     ```bash
@@ -44,7 +44,8 @@ Thank you for your interest in contributing to sysi! Here are some simple guidel
 
 ## License
 
-By contributing to [sysi], you agree that your contributions will be licensed under the [MIT License].
+By contributing to [sysi], you will have responsibility and with responsibility comes great power.
+do what you want with the code 
 
 ## Contact
 
