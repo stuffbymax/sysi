@@ -1,0 +1,461 @@
+#!/bin/bash
+set -u
+
+# Function to add colors to text
+color_text() {
+    local color=$1
+    local text=$2
+
+    # ANSI color codes
+    declare -A colors=(
+        ["black"]="\033[30m" ["red"]="\033[31m" ["green"]="\033[32m"
+        ["yellow"]="\033[33m" ["blue"]="\033[34m" ["magenta"]="\033[35m"
+        ["cyan"]="\033[36m" ["white"]="\033[37m" ["bright_black"]="\033[90m"
+        ["bright_red"]="\033[91m" ["bright_green"]="\033[92m" ["bright_yellow"]="\033[93m"
+        ["bright_blue"]="\033[94m" ["bright_magenta"]="\033[95m" ["bright_cyan"]="\033[96m"
+        ["bright_white"]="\033[97m" ["bg_black"]="\033[40m" ["bg_red"]="\033[41m"
+        ["bg_green"]="\033[42m" ["bg_yellow"]="\033[43m" ["bg_blue"]="\033[44m"
+        ["bg_magenta"]="\033[45m" ["bg_cyan"]="\033[46m" ["bg_white"]="\033[47m"
+        ["bg_bright_black"]="\033[100m" ["bg_bright_red"]="\033[101m"
+        ["bg_bright_green"]="\033[102m" ["bg_bright_yellow"]="\033[103m"
+        ["bg_bright_blue"]="\033[104m" ["bg_bright_magenta"]="\033[105m"
+        ["bg_bright_cyan"]="\033[106m" ["bg_bright_white"]="\033[107m"
+    )
+
+    # Output the colored text, or an error message if the color is not found
+    if [[ ${colors[$color]} ]]; then
+        echo -e "${colors[$color]}${text}\033[0m"
+    else
+        echo "Color '$color' not recognized."
+    fi
+}
+
+
+# Function to center text based on terminal width, handling multi-line input
+center_text() {
+    local text="$1"
+    local cols=$(tput cols)
+    while IFS= read -r line; do
+        local text_length=${#line}
+        if [ $text_length -lt $cols ]; then
+            local padding=$(( (cols - text_length) / 2 ))
+            printf "%${padding}s%s\n" " " "$line"
+        else
+            echo "$line"
+        fi
+    done <<< "$text"
+}
+
+
+
+
+
+# Function to calculate percentage
+get_percentage() {
+    used=$1
+    total=$2
+    awk -v used="$used" -v total="$total" 'BEGIN { printf("%.2f%%", (used / total) * 100) }'
+}
+
+# Get memory and swap usage details
+memory_usage=$(free -h --si | awk '/^Mem/ {print $3 " / " $2}')
+swap_usage=$(free -h --si | awk '/^Swap/ {print $3 " / " $2}')
+
+# Calculate percentage for memory
+memory_used=$(free --si | awk '/^Mem/ {print $3}')
+memory_total=$(free --si | awk '/^Mem/ {print $2}')
+memory_percentage=$(get_percentage "$memory_used" "$memory_total")
+
+# Calculate percentage for swap
+swap_used=$(free --si | awk '/^Swap/ {print $3}')
+swap_total=$(free --si | awk '/^Swap/ {print $2}')
+swap_percentage=$(get_percentage "$swap_used" "$swap_total")
+
+# Function to display ASCII art of a computer screen with SYSI
+display_logo() {
+    center_text "$(color_text "bg_red" "      _________")"
+    center_text "$(color_text "bg_green" "     /         |")"
+    center_text "$(color_text "bg_yellow" "    / _______   |")"
+    center_text "$(color_text "bg_blue" "   | |       |  |")"
+    center_text "$(color_text "bg_magenta" "   | |  SYSI |  |")"
+    center_text "$(color_text "bg_cyan" "   | |_______|  |")"
+    center_text "$(color_text "bg_white" "   |           |")"
+    center_text "$(color_text "bg_bright_red" "   |  _______  |")"
+    center_text "$(color_text "bg_bright_yellow" "   | /       \\ |")"
+    center_text "$(color_text "bg_bright_blue" "   |/         \\|")"
+    center_text "$(color_text "bg_green" "    \\___________/")"
+    echo ""
+}
+
+# Function to display system informations
+display_info() {
+    os=$(awk -F= '/^PRETTY_NAME=/{print $2}' /etc/os-release | tr -d '"')
+    center_text "$(color_text "bg_green" "  Operační systém")"
+    center_text "$(color_text "bright_white"  "$os")"
+    echo""
+    center_text "$(color_text "bg_green" "  Host")"
+    center_text "$(color_text "bright_white" "$(cat /proc/sys/kernel/hostname)")"
+    echo""
+    center_text "$(color_text "bg_green" "  Model")"
+    center_text "$(color_text "bright_white" "$(cat /sys/devices/virtual/dmi/id/board_{name,vendor} | awk '!(NR%2){print$1,p}{p=$0}')")"
+    echo""
+    center_text "$(color_text "bg_yellow" "  Přihlášení uživatelé")"
+    center_text "$(w)"
+    echo""
+    center_text "$(color_text "bg_yellow" "  Název jádra")"
+    center_text "$(color_text "bright_white" "$(uname -s)")"
+    echo""
+    center_text "$(color_text "bg_yellow" "  Verze jádra")"
+    center_text "$(color_text "bright_white" "$(uname -r)")"
+    echo""
+    center_text "$(color_text "bg_yellow" "  Vydání jádra \e[0m")"
+    center_text "$(uname -v)"
+    echo""
+    center_text "$(color_text "bg_yellow" "  Architektura jádra")"
+    center_text "$(color_text "bright_white" "$(uname -m)")"
+    echo""
+    center_text "$(color_text "bg_white" "  Doba provozuschopnosti")"
+    center_text "$(color_text "bg_blue" "\e[0m $(uptime -p)")"
+    echo""
+    center_text "$(color_text "bg_white" " Hodiny/čas")"
+    center_text "$(color_text "white" "\e[0m $(date '+%Y-%m-%d %H:%M:%S')")"
+    echo""
+    center_text "$(color_text "bg_bright_black" "  Balíčky: $(get_package_count)")"
+    echo""
+    center_text "$(color_text "bg_bright_black" "  Rozlišení")"
+    center_text "$(color_text "bright_white" "\e[0m $(xrandr | grep -i  "*" )")"
+    echo""
+    center_text "$(color_text "bg_bright_black" "  Hardwarová platforma stroje")"
+    center_text "$(color_text "bg_white" "\e[0m $(uname -i)")"
+    echo""
+    center_text "$(color_text "bg_bright_black" "  Typ procesoru")"
+    
+    center_text "$(color_text "bg_bright_black" "\e[0m $(uname -p)")"
+    echo""
+    center_text "$(color_text "bg_blue" "  procesor")"
+    center_text "$(color_text "bg_blue" "\e[0m $(grep "model name" /proc/cpuinfo | cut -d ' ' -f 3- | uniq)")"
+    echo""
+    center_text "$(color_text "bg_blue" "  CPU jádra")"
+    center_text "$(color_text "bg_blue" "\e[0m $(awk '/^cpu cores/ {print $4; exit}' /proc/cpuinfo)")"
+    echo""
+    center_text "$(color_text "bg_blue" "  CPU vlákna")"
+    center_text "$(color_text "bg_blue" "\e[0m $(awk '/^processor/ {count++} END {print count}' /proc/cpuinfo)")"
+    echo""
+    center_text "$(color_text "bg_blue" "  Otáčky ventilátoru")"
+    center_text "$(color_text "bg_blue" "\e[0m$(sensors | grep -i 'fan' | awk '{print "      ", $1, $2, $3, $4}')")"
+    echo""
+if command -v sensors &> /dev/null; then
+     center_text "$(color_text "bg_bright_blue" "  Teplota CPU")"
+    # Collect all lines containing "Core" from sensors output
+    echo ""
+    core_lines=$(sensors | grep "Core")
+
+    # Iterate over each line and center it
+    while IFS= read -r line; do
+        center_text "$(color_text "bg_red" "$line")"
+    done <<< "$core_lines"
+else
+    center_text "$(color_text "bg_red" "  Teplota CPU: Není dostupný (lm_sensors not installed)")"
+fi
+echo ""
+
+    center_text "$(color_text "bg_bright_black" "  GPU")"
+    center_text "$(color_text "bg_bright_black" "\e[0m $(lspci | grep VGA | cut -d ':' -f 3 | cut -d '[' -f 1,2 | sed 's/^ *//')")"
+    echo""
+    if ! command -v sensors &> /dev/null; then
+    center_text "$(color_text "red" "lmsensory nejsou nainstalovány")"
+else
+    gpu_temp=$(sensors | grep -i 'gpu')
+    if [ -z "$gpu_temp" ]; then
+        center_text "$(color_text "bg_bright_red" "  Nejsou k dispozici žádné údaje o teplotě GPU")"
+    else
+        center_text "$(color_text "bg_bright_black" "  Teploty GPU:" "$gpu_temp")"
+       fi
+    fi
+    echo ""
+    center_text "$(color_text "bg_bright_magenta" "  Paměť: ($memory_percentage) ($memory_usage)")"
+    echo""
+    center_text "$(color_text "bg_bright_magenta" "  Swap: ($swap_percentage) ($swap_usage)")"
+    echo""
+        local disk_usage=$(df -h / | awk 'NR==2 {print "(" $5 " used) " $3 "/" $2 }')
+    center_text "$(color_text "bg_bright_black" "  Využití disku: ${disk_usage}")"
+    echo""
+        local battery_info=$(upower -i $(upower -e | grep BAT) | grep --color=never -E "state|to full|percentage")
+    center_text "$(color_text "bg_bright_black" "  baterie:")"
+    while IFS= read -r line; do
+        center_text "$line"
+    done <<< "$battery_info"
+    echo""
+        center_text "$(color_text "bg_cyan" "  Nejlepší procesy podle využití CPU")"
+    ps -eo pid,%cpu,%mem,cmd --sort=-%cpu | head -n 11 | while IFS= read -r line; do
+        center_text "$line"
+    done
+    echo ""
+    center_text "$(color_text "bg_cyan" "  Nejlepší procesy podle využití paměti")"
+    ps -eo pid,%cpu,%mem,cmd --sort=-%mem | head -n 11 | while IFS= read -r line; do
+        center_text "$line"
+    done
+    echo ""
+    
+  center_text "$(color_text "bg_yellow" " Statistika I/O disku")"
+    local io_stats=$(iostat)
+    while IFS= read -r line; do
+        center_text "$line"
+    done <<< "$io_stats"
+    echo ""
+    center_text "$(color_text "bg_bright_black" "  Namontované disky")"
+    echo ""
+    local header="$(color_text "bg_blue" "      Filesystem                        Size       Used      Use%")"
+    center_text "$header"
+    local drives=$(df -h | awk 'NR>1 {printf "      %-30s %-10s %-10s %-10s\n", $1, $2, $3, $5}')
+    while IFS= read -r line; do
+        center_text "$line"
+    done <<< "$drives"
+echo""
+
+# [Additional functionalities enable manually not translated to Czech language]
+
+# [network]
+#Display Network Interfaces
+#    center_text "$(color_text "bg_yellow" "  Síťová rozhraní:")"
+#    ip addr show | sed 's/^/      /'
+#echo""
+
+# [gpu]
+# Display GPU temperatures for Nvidia, AMD, and Intel GPUs if available
+#    center_text "$(color_text "bg_yellow" "  Teploty GPU:")"
+    
+    # Check and display Nvidia GPU temperature
+#    if command -v nvidia-smi &> /dev/null; then
+#        center_text "$(color_text "bg_yellow" "   Nvidia:")"
+#        nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader | awk '{print "      ", $1, "°C"}'
+#    fi
+
+    # Check and display AMD GPU temperature
+#    if command -v radeontop &> /dev/null; then
+#        center_text "$(color_text "bg_yellow" "   AMD:")"
+#        radeontop -l1 | grep "Temperature" | sed 's/^/      /'
+#    fi
+
+    # Check and display Intel GPU temperature
+#    if command -v intel_gpu_top &> /dev/null; then
+#        center_text "$(color_text "bg_yellow" "   Intel:")"
+#        intel_gpu_top -s 1 | awk '/Rendering/ {print "      ", $7, "°C"}'
+#    fi
+
+
+
+# [uptime]
+
+
+# Display Uptime
+#    center_text "$(color_text "bg_yellow" "  Doba provozuschopnosti:") $(uptime)"
+#echo ""
+
+# [shell]
+# Display Shell
+ #  center_text "$(color_text "bg_green" " Shell:") $SHELL"
+
+
+# [firewall]
+# Display Firewall Information requires password
+    #center_text "$(color_text "bg_yellow" "  Informace o bráně firewall:")"
+    #center_text "$(color_text "bg_yellow" "   UFW Stav:")"
+    #ufw status verbose | sed 's/^/      /'  # Upravte formát podle potřeby pro výstup vašeho systému
+    #center_text "$(color_text "bg_yellow" "   Pravidla IPTtables:")"
+    #iptables -L -v -n | sed 's/^/      /'  # upravte formát podle potřeby pro výstup vašeho systému
+    #center_text "$(color_text "bg_yellow" "   Firewallové zóny a služby:")"
+    #firewall-cmd --list-all-zones | sed 's/^/      /'  # Upravte formát podle potřeby pro výstup vašeho systému
+    #center_text "$(color_text "bg_yellow" "   Pravidla Nftables:")"
+    #nft list ruleset | sed 's/^/      /'  # Upravte formát podle potřeby pro výstup vašeho systému
+
+# [resolution]
+# Display Resolution
+#    center_text "$(color_text "bg_yellow" " Rozlišení")"
+#    center_text "$(color_text "bg_yellow"  "\e[0m $(hwinfo --monitor)")"
+#    echo""
+ 
+ 
+
+}
+
+# Function to display a random quote
+display_quote() {
+    quotes=(
+         "Talk is cheap. Show me the code. - Linus Torvalds"
+        "Most good programmers do programming not because they expect to get paid or get adulation by the public, but because it is fun to program. - Linus Torvalds"
+        "Free software is software that respects your freedom and the social solidarity of your community. So it's free as in freedom. - Richard Stallman"
+        "Control over the use of one's ideas really constitutes control over other people's lives; and it is usually used to make their lives more difficult. - Richard Stallman"
+        "Given enough eyeballs, all bugs are shallow. - Eric S. Raymond"
+        "The next best thing to having good ideas is recognizing good ideas from your users. Sometimes the latter is better. - Eric S. Raymond"
+        "The Web as I envisaged it, we have not seen it yet. The future is still so much bigger than the past. - Tim Berners-Lee"
+        "The only way to make software secure, reliable, and fast is to put it out in the public domain and let people attack it, play with it, and break it. - Brian Behlendorf"
+        "I believe that openness is the key to creativity and innovation. - Mitchell Baker"
+        "May the Force be with you. -Star Wars (many characters)"
+        "Knowledge is power. -Sir Francis Bacon"
+        "Information flow is what the Internet is about. Information sharing is power. If you dont share your ideas smart people cant do anything about them and your all remain anonymous and powerless. -Vint cerf"
+        "When we have welcoming communities of contributors, open source software gets better and more useful to everyone. -Limor Fried"
+        "Open source is about collaborating; not competing. -Kelesey Hightower"
+    )
+    random_index=$((RANDOM % ${#quotes[@]}))
+  center_text "$(color_text "bg_cyan" "Random Quote: ${quotes[$random_index]}")"
+  echo""
+}
+
+
+# Function to display a random programming joke
+display_joke() {
+    jokes=(
+        "Why do programmers prefer dark mode? Because light attracts bugs!"
+        "There are 10 types of people in the world: those who understand binary and those who don't."
+        "A SQL statement walks into a bar and sees two tables. It approaches, and asks, 'May I join you?'"
+        "Why do Java developers wear glasses? Because they don't see sharp."
+        "How many programmers does it take to change a light bulb? None. It's a hardware problem."
+        "your mama so fat 32 she cant store file over 4 GB"
+        "your mama so ugly she turn sdd into flopy"
+        "Knock, knock. Who’s There? Very long pause… Java."
+        "Things aren’t always #000000 and #FFFFFF"
+        "Why do Java programmers have to wear glasses? Because they don’t C#"
+        "There’s no place like 127.0.0.1"
+        "My love for you has no bugs"
+        "Real programmers count from 0"
+        "while (alive) { eat(); sleep (); code ();}"
+        "Binary: It’s as easy as 01, 10, 11"
+    )
+    random_index=$((RANDOM % ${#jokes[@]}))
+    center_text "$(color_text "bg_magenta" "Joke of the Day: ${jokes[$random_index]}")"
+    echo""
+}
+
+
+# Function to display a random fun fact
+display_fun_fact() {
+    facts=(
+        "The first computer bug was an actual bug: a moth stuck in a Harvard Mark II in 1947."
+        "The first 1GB hard drive, announced in 1980, weighed over 500 pounds and cost 40000."
+        "The first computer virus was created in 1983 by Fred Cohen as part of his PhD thesis."
+        "The first programming language was Ada Lovelace's algorithm for Charles Babbage's Analytical Engine."
+        "The first webcam was used to monitor a coffee pot at the University of Cambridge."
+        "The first computer mouse was made of wood."
+        "The Firefox logo isnt a fox. is Red panda."
+        "Nintendo made playing cards."
+        "As of 2017, 2.1 millions people still use dial up."
+        "Google's First Tweet was in binary"
+        "Motorola produced the first handheld mobile phone."
+        "YouTube uploads 72 hours of video every single minute. "
+        "The First Computer Weighed More Than 24,493.988 KG/27 Tons."
+        "The C Language was not called C at the beginning"
+        
+    )
+    random_index=$((RANDOM % ${#facts[@]}))
+    center_text "$(color_text "bg_yellow" "Fun Fact: ${facts[$random_index]}")"
+    echo""
+}
+
+
+get_package_count() {
+    local package_count="N/A"
+
+if command -v dpkg >/dev/null 2>&1; then
+    pkgs=$(dpkg -l | grep '^ii' | wc -l)
+    source="(dpkg)"
+elif command -v pacman >/dev/null 2>&1; then
+    pkgs=$(pacman -Q | wc -l)
+    source="(pacman)"
+elif command -v equo >/dev/null 2>&1; then
+    pkgs=$(equo query list installed -q | wc -l)
+    source="(equo)"
+elif command -v eopkg >/dev/null 2>&1; then
+    pkgs=$(eopkg list-installed | wc -l)
+    source="(eopkg)"
+elif command -v tce-status >/dev/null 2>&1; then
+    pkgs=$(tce-status -i | wc -l)
+    source="(tce-status)"
+elif command -v apk >/dev/null 2>&1; then
+    pkgs=$(apk info | wc -l)
+    source="(apk)"
+elif command -v xbps-query >/dev/null 2>&1; then
+    pkgs=$(xbps-query -l | wc -l)
+    source="(xbps-query)"
+elif command -v emerge >/dev/null 2>&1; then
+    pkgs=$(qlist -I | wc -l)
+    source="(emerge)"
+elif command -v rpm >/dev/null 2>&1; then
+    pkgs=$(rpm -qa | wc -l)
+    source="(rpm)"
+fi
+
+    echo "$pkgs" "$source"
+}
+
+# Function to get information about various gnome themes 
+get_theme_info() {
+    local gtk_theme icon_theme cursor_theme shell_theme
+
+    # Get GTK theme
+    gtk_theme=$(gsettings get org.gnome.desktop.interface gtk-theme 2>/dev/null)
+    gtk_theme="${gtk_theme//\'/}"  # Remove single quotes from the output
+
+    # Get icon theme
+    icon_theme=$(gsettings get org.gnome.desktop.interface icon-theme 2>/dev/null)
+    icon_theme="${icon_theme//\'/}"  # Remove single quotes from the output
+
+    # Get cursor theme
+    cursor_theme=$(gsettings get org.gnome.desktop.interface cursor-theme 2>/dev/null)
+    cursor_theme="${cursor_theme//\'/}"  # Remove single quotes from the output
+
+
+    # Display themes using center_text function
+    center_text "$(color_text "bg_red" "GTK Theme: $gtk_theme")"
+    echo""
+    center_text "$(color_text "bg_green" "Icon Theme: $icon_theme")"
+    echo""
+    center_text "$(color_text "bg_blue" "Cursor Theme: $cursor_theme")"
+    
+    
+
+}
+
+
+
+    # Easter egg for ASUSTeK model
+    get_model() {
+    model=$(cat /sys/devices/virtual/dmi/id/board_{name,vendor} | awk '!(NR%2){print$1,p}{p=$0}')
+    if [[ "$model" == *"ASUSTeK"* ]]; then
+        echo ""
+        center_text "$(color_text "bg_bright_black" "Asus more like ASSUS")"
+    fi
+    echo""
+}
+
+#stuff about the program
+sysi-info() {
+center_text "$(color_text "bg_bright_black" "Jazyk")"
+echo ""
+center_text "$(color_text "bg_bright_blue" "čeština")"
+echo ""
+center_text "$(color_text "bg_bright_black" "sysi verze")"
+echo ""
+center_text "$(color_text "bg_bright_blue" "1.0.3")"
+echo ""
+center_text "$(color_text "bg_bright_black" "vývojář")"
+echo ""
+center_text "$(color_text "bg_bright_blue" "hlavní vývojář stuffbymax")"
+}
+    
+
+# Main function to display output
+main() {
+    clear
+    display_logo
+    display_info
+    get_theme_info
+    get_model
+    display_quote
+    display_joke
+    display_fun_fact
+    czef
+}
+
+# Execute main function
+main
