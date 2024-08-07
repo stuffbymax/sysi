@@ -1,3 +1,4 @@
+the sysi (system information) this project is temporary on hold because too much hate of acusing that is made by ai and that is a virus and that doesnt make me happy if you know how it feels also because i cant concentrate because of my rips pain
  # people who would prefer to stay anonymous that helped.
  - mz provided get_percentage stuff and set -u set -e set -o pipefail
  - sy pointed that storage % was on right
