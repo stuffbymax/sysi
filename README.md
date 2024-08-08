@@ -12,7 +12,7 @@ the sysi (system information) this project is temporary on hold because too much
 
 # sysi Script
 
-README written by AI
+the README is written by AI again the README is written by AI the project is not made by ai only the README
 ----
 ]
 
