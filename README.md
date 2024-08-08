@@ -12,7 +12,7 @@ the sysi (system information) this project is temporary on hold because too much
 
 # sysi Script
 
-the README is written by AI again the README is written by AI the project is not made by ai only the README
+the README is written by AI and the install.sh again the README is written by AI and the install.sh  the project is not made by ai only the README and install.sh
 ----
 ]
 
