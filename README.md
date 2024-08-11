@@ -1,20 +1,21 @@
+#no mather what you did you will still be on the wall 
 
  # people who would prefer to stay anonymous that helped.
  - mz provided get_percentage stuff and set -u set -e set -o pipefail
  - sy pointed that storage % was on right
  - tg helped a lot mz helped a lot and sy helped a lot
+ - BluishHumility fixed the ai problem
+ - DsturbD pointed the nerd-font problem
    
 # people that helped
-- BluishHumility fixed the ai problem
-- DsturbD pointed the nerd-font problem
 
-[this section is made by BluishHumility
+
 
 # sysi Script
 
 the README is written by AI and the install.sh again the README is written by AI and the install.sh  the project is not made by ai only the README and install.sh
 ----
-]
+
 
 # what i use AI for
 * readme
