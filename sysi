@@ -1,18 +1,9 @@
 #!/bin/bash
 set -u
-
-# Function to add colors to text
 color_text() {
     local color=$1
     local text=$2
-
-    # ANSI color codes
     declare -A colors=(
-        ["black"]="\033[30m" ["red"]="\033[31m" ["green"]="\033[32m"
-        ["yellow"]="\033[33m" ["blue"]="\033[34m" ["magenta"]="\033[35m"
-        ["cyan"]="\033[36m" ["white"]="\033[37m" ["bright_black"]="\033[90m"
-        ["bright_red"]="\033[91m" ["bright_green"]="\033[92m" ["bright_yellow"]="\033[93m"
-        ["bright_blue"]="\033[94m" ["bright_magenta"]="\033[95m" ["bright_cyan"]="\033[96m"
         ["bright_white"]="\033[97m" ["bg_black"]="\033[40m" ["bg_red"]="\033[41m"
         ["bg_green"]="\033[42m" ["bg_yellow"]="\033[43m" ["bg_blue"]="\033[44m"
         ["bg_magenta"]="\033[45m" ["bg_cyan"]="\033[46m" ["bg_white"]="\033[47m"
@@ -22,14 +13,12 @@ color_text() {
         ["bg_bright_cyan"]="\033[106m" ["bg_bright_white"]="\033[107m"
     )
 
-    # Output the colored text, or an error message if the color is not found
-    if [[ ${colors[$color]} ]]; then
+    if [[ -n "${colors[$color]}" ]]; then
         echo -e "${colors[$color]}${text}\033[0m"
     else
         echo "Color '$color' not recognized."
     fi
 }
-
 
 # Function to center text based on terminal width, handling multi-line input
 center_text() {
@@ -45,10 +34,6 @@ center_text() {
         fi
     done <<< "$text"
 }
-
-
-
-
 
 # Function to calculate percentage
 get_percentage() {
@@ -84,7 +69,7 @@ display_logo() {
     center_text "$(color_text "bg_bright_yellow" "   | /       \\ |")"
     center_text "$(color_text "bg_bright_blue" "   |/         \\|")"
     center_text "$(color_text "bg_green" "    \\___________/")"
-    echo ""
+    echo""
 }
 
 # Function to display system informations
@@ -118,7 +103,7 @@ display_info() {
     center_text "$(color_text "bg_blue" "\e[0m $(uptime -p)")"
     echo""
     center_text "$(color_text "bg_white" " Clock/Time")"
-    center_text "$(color_text "white" "\e[0m $(date '+%Y-%m-%d %H:%M:%S')")"
+    center_text "$(color_text "bright_white" "\e[0m $(date '+%Y-%m-%d %H:%M:%S')")"
     echo""
     center_text "$(color_text "bg_bright_black" "  Packages: $(get_package_count)")"
     echo""
@@ -129,7 +114,6 @@ display_info() {
     center_text "$(color_text "bg_white" "\e[0m $(uname -i)")"
     echo""
     center_text "$(color_text "bg_bright_black" "  Processor Type")"
-    
     center_text "$(color_text "bg_bright_black" "\e[0m $(uname -p)")"
     echo""
     center_text "$(color_text "bg_blue" "  CPU")"
@@ -147,9 +131,8 @@ display_info() {
 if command -v sensors &> /dev/null; then
      center_text "$(color_text "bg_bright_blue" "  CPU Temperature")"
     # Collect all lines containing "Core" from sensors output
-    echo ""
+    echo""
     core_lines=$(sensors | grep "Core")
-
     # Iterate over each line and center it
     while IFS= read -r line; do
         center_text "$(color_text "bg_red" "$line")"
@@ -157,8 +140,7 @@ if command -v sensors &> /dev/null; then
 else
     center_text "$(color_text "bg_red" "  CPU Temperature: Not available (lm_sensors not installed)")"
 fi
-echo ""
-
+echo""
     center_text "$(color_text "bg_bright_black" "  GPU")"
     center_text "$(color_text "bg_bright_black" "\e[0m $(lspci | grep VGA | cut -d ':' -f 3 | cut -d '[' -f 1,2 | sed 's/^ *//')")"
     echo""
@@ -172,10 +154,12 @@ else
         center_text "$(color_text "bg_bright_black" "  GPU Temperatures:" "$gpu_temp")"
        fi
     fi
-    echo ""
-    center_text "$(color_text "bg_bright_magenta" "  Memory: ($memory_percentage) ($memory_usage)")"
     echo""
-    center_text "$(color_text "bg_bright_magenta" "  Swap: ($swap_percentage) ($swap_usage)")"
+    center_text "$(color_text "bg_bright_magenta" "  Memory")"
+    center_text "$(color_text "bg_black" "($memory_usage) ($memory_percentage)")" 
+    echo""
+    center_text "$(color_text "bg_bright_magenta" "Swap")"
+    center_text "$(color_text "bg_black" "($swap_usage) ($swap_percentage)")"
     echo""
         local disk_usage=$(df -h / | awk 'NR==2 {print "(" $5 " used) " $3 "/" $2 }')
     center_text "$(color_text "bg_bright_black" "  Disk Usage: ${disk_usage}")"
@@ -190,19 +174,18 @@ else
     ps -eo pid,%cpu,%mem,cmd --sort=-%cpu | head -n 11 | while IFS= read -r line; do
         center_text "$line"
     done
-    echo ""
+    echo""
     center_text "$(color_text "bg_cyan" "  Top Processes by Memory Usage")"
     ps -eo pid,%cpu,%mem,cmd --sort=-%mem | head -n 11 | while IFS= read -r line; do
         center_text "$line"
     done
-    echo ""
-    
+    echo""
   center_text "$(color_text "bg_yellow" " Disk I/O Statistics")"
     local io_stats=$(iostat)
     while IFS= read -r line; do
         center_text "$line"
     done <<< "$io_stats"
-    echo ""
+    echo""
     center_text "$(color_text "bg_bright_black" "  Mounted Drives")"
     echo ""
     local header="$(color_text "bg_blue" "      Filesystem                        Size       Used      Use%")"
@@ -215,14 +198,12 @@ echo""
 
 # [Additional functionalities enable manually]
 
-# [network]
-#Display Network Interfaces
+# [#Display Network Interfaces]
 #    center_text "$(color_text "bg_yellow" "  Network Interfaces:")"
 #    ip addr show | sed 's/^/      /'
 #echo""
 
-# [gpu]
-# Display GPU temperatures for Nvidia, AMD, and Intel GPUs if available
+# [# Display GPU temperatures for Nvidia, AMD, and Intel GPUs if available]
 #    center_text "$(color_text "bg_yellow" "  GPU Temperatures:")"
     
     # Check and display Nvidia GPU temperature
@@ -243,27 +224,14 @@ echo""
 #        intel_gpu_top -s 1 | awk '/Rendering/ {print "      ", $7, "°C"}'
 #    fi
 
-
-# [logs]
-# Display System Logs (last 20 lines of syslog)
-#    center_text "$(color_text "bg_yellow" "  System Logs (last 20 lines of syslog):")"
-#    tail -n 20 /var/log/syslog | sed 's/^/      /'
-
-
-# [uptime]
-
-
-# Display Uptime
+# [Display Uptime]
 #    center_text "$(color_text "bg_yellow" "  Uptime:") $(uptime)"
 #echo ""
 
-# [shell]
-# Display Shell
- #  center_text "$(color_text "bg_green" " Shell:") $SHELL"
+# [Display Shell]
+ # center_text "$(color_text "bg_green" " Shell:") $SHELL"
 
-
-# [firewall]
-# Display Firewall Information requires password
+# [Display Firewall Information requires password]
     #center_text "$(color_text "bg_yellow" "  Firewall Information:")"
     #center_text "$(color_text "bg_yellow" "   UFW Status:")"
     #ufw status verbose | sed 's/^/      /'  # Adjust format as needed for your system's output
@@ -279,11 +247,7 @@ echo""
 #    center_text "$(color_text "bg_yellow" " Resolution")"
 #    center_text "$(color_text "bg_yellow"  "\e[0m $(hwinfo --monitor)")"
 #    echo""
- 
- 
-
 }
-
 # Function to display a random quote
 display_quote() {
     quotes=(
@@ -307,14 +271,12 @@ display_quote() {
   echo""
 }
 
-
 # Function to display a random programming joke
 display_joke() {
     jokes=(
         "Why do programmers prefer dark mode? Because light attracts bugs!"
         "There are 10 types of people in the world: those who understand binary and those who don't."
         "A SQL statement walks into a bar and sees two tables. It approaches, and asks, 'May I join you?'"
-        "Why do Java developers wear glasses? Because they don't see sharp."
         "How many programmers does it take to change a light bulb? None. It's a hardware problem."
         "your mama so fat 32 she cant store file over 4 GB"
         "your mama so ugly she turn sdd into flopy"
@@ -331,7 +293,6 @@ display_joke() {
     center_text "$(color_text "bg_magenta" "Joke of the Day: ${jokes[$random_index]}")"
     echo""
 }
-
 
 # Function to display a random fun fact
 display_fun_fact() {
@@ -357,10 +318,8 @@ display_fun_fact() {
     echo""
 }
 
-
 get_package_count() {
     local package_count="N/A"
-
 if command -v dpkg >/dev/null 2>&1; then
     pkgs=$(dpkg -l | grep '^ii' | wc -l)
     source="(dpkg)"
@@ -393,36 +352,65 @@ fi
     echo "$pkgs" "$source"
 }
 
-# Function to get information about various gnome themes 
+# Function to get information about various themes
+# !doesnt work on debian! 
 get_theme_info() {
-    local gtk_theme icon_theme cursor_theme shell_theme
+    local gtk_theme icon_theme cursor_theme shell_theme window_manager_theme qt_theme
+
+    # Initialize a flag to check if any themes are found
+    local any_themes_found=0
 
     # Get GTK theme
-    gtk_theme=$(gsettings get org.gnome.desktop.interface gtk-theme 2>/dev/null)
-    gtk_theme="${gtk_theme//\'/}"  # Remove single quotes from the output
+    if gtk_theme=$(gsettings get org.gnome.desktop.interface gtk-theme 2>/dev/null); then
+        gtk_theme="${gtk_theme//\'/}"  # Remove single quotes from the output
+        center_text "$(color_text "bg_red" "GTK Theme: $gtk_theme")"
+        any_themes_found=1
+    fi
 
     # Get icon theme
-    icon_theme=$(gsettings get org.gnome.desktop.interface icon-theme 2>/dev/null)
-    icon_theme="${icon_theme//\'/}"  # Remove single quotes from the output
+    if icon_theme=$(gsettings get org.gnome.desktop.interface icon-theme 2>/dev/null); then
+        icon_theme="${icon_theme//\'/}"  # Remove single quotes from the output
+        center_text "$(color_text "bg_green" "Icon Theme: $icon_theme")"
+        any_themes_found=1
+    fi
 
     # Get cursor theme
-    cursor_theme=$(gsettings get org.gnome.desktop.interface cursor-theme 2>/dev/null)
-    cursor_theme="${cursor_theme//\'/}"  # Remove single quotes from the output
+    if cursor_theme=$(gsettings get org.gnome.desktop.interface cursor-theme 2>/dev/null); then
+        cursor_theme="${cursor_theme//\'/}"  # Remove single quotes from the output
+        center_text "$(color_text "bg_blue" "Cursor Theme: $cursor_theme")"
+        any_themes_found=1
+    fi
 
+    # Get GNOME Shell theme
+    if shell_theme=$(gsettings get org.gnome.shell.extensions.user-theme name 2>/dev/null); then
+        shell_theme="${shell_theme//\'/}"  # Remove single quotes from the output
+        center_text "$(color_text "bg_yellow" "Shell Theme: $shell_theme")"
+        any_themes_found=1
+    fi
 
-    # Display themes using center_text function
-    center_text "$(color_text "bg_red" "GTK Theme: $gtk_theme")"
-    echo""
-    center_text "$(color_text "bg_green" "Icon Theme: $icon_theme")"
-    echo""
-    center_text "$(color_text "bg_blue" "Cursor Theme: $cursor_theme")"
-    
-    
+    # Get Window Manager theme (example for Openbox)
+    if [ -f ~/.config/openbox/rc.xml ]; then
+        window_manager_theme=$(grep -E '^theme=' ~/.config/openbox/rc.xml | sed 's/theme=//')
+        if [ -n "$window_manager_theme" ]; then
+            center_text "$(color_text "bg_cyan" "Window Manager Theme: $window_manager_theme")"
+            any_themes_found=1
+        fi
+    fi
 
+    # Get Qt theme (example for Qt5 applications)
+    if [ -f ~/.config/qt5ct/qt5ct.conf ]; then
+        qt_theme=$(grep -E '^theme=' ~/.config/qt5ct/qt5ct.conf | sed 's/theme=//')
+        if [ -n "$qt_theme" ]; then
+            center_text "$(color_text "bg_magenta" "Qt Theme: $qt_theme")"
+            any_themes_found=1
+        fi
+    fi
+
+    # If no themes were found, provide a message
+    if [ $any_themes_found -eq 0 ]; then
+        center_text "$(color_text "bg_gray" "No themes or settings found.")"
+    fi
 }
-
-
-
     # Easter egg for ASUSTeK model
     get_model() {
     model=$(cat /sys/devices/virtual/dmi/id/board_{name,vendor} | awk '!(NR%2){print$1,p}{p=$0}')
@@ -436,18 +424,14 @@ get_theme_info() {
 #stuff about the program
 sysi-info() {
 center_text "$(color_text "bg_bright_black" "language")"
-echo ""
+echo""
 center_text "$(color_text "bg_bright_blue" "english")"
-echo ""
+echo""
 center_text "$(color_text "bg_bright_black" "sysi version")"
-echo ""
-center_text "$(color_text "bg_bright_blue" "1.0.3")"
-echo ""
-center_text "$(color_text "bg_bright_black" "developer")"
-echo ""
-center_text "$(color_text "bg_bright_blue" "main developer stuffbymax")"
+echo""
+center_text "$(color_text "bg_bright_blue" "1.0.9")"
+echo""
 }
-    
 
 # Main function to display output
 main() {
@@ -461,6 +445,5 @@ main() {
     display_fun_fact
     sysi-info
 }
-
 # Execute main function
 main
