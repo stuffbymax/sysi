@@ -7,22 +7,13 @@
 - BluishHumility fixed the ai problem
 - DsturbD pointed the nerd-font problem
 
-# manual installation for all linux distros
-```
-cd yourdirlocation/sysi
-```
-```
-mv sysi /usr/local/bin/
-```
-### for example:
-```
-cd Download/sysi
-mv sysi /usr/local/bin/
-```
+[this section is made by BluishHumility
+
 # sysi Script
 
 README written by AI
 ----
+]
 
 # what i use AI for
 * readme
