@@ -1,4 +1,3 @@
-echo 'if_rtwn_pci_load="YES"' >> /boot/loader.conf
  # people who would prefer to stay anonymous that helped.
  - mz provided get_percentage stuff and set -u set -e set -o pipefail
  - sy pointed that storage % was on right
