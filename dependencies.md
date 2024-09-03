@@ -76,5 +76,3 @@ sudo apt install -y lm-sensors sysstat upower fonts-dejavu
 - **Core Dependencies** are essential for the script's functionality.
 - **Optional Dependencies** are needed for specific features or functionalities but are not critical for the basic operation of the script.
 - Use `pacman` to install packages on Arch Linux. The `-S` flag is used to sync and install packages from the repository.
-```
-This Markdown file provides a clear list of dependencies and installation commands, which should help in setting up the environment required to run your script.
